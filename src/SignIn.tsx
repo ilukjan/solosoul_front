@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
 import background from './assets/images/sign_in/sign_in_background_small@2x.jpg';
-import { signIn, test } from './services/requests';
+import { signIn } from './services/requests';
 
 function SignIn() {
   const [username, setUsername] = useState('');
@@ -14,8 +14,7 @@ function SignIn() {
   const handleSignIn = () => {
     // setSignInLoading(true)
     console.log(username, password);
-    test()
-    // signIn({ username, password });
+    signIn({ username, password });
   };
 
   return (
