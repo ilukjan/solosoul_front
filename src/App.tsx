@@ -22,7 +22,7 @@ import { AppProvider } from './providers/AppProvider';
 //   { path: AppRoutes.PRIVACY, element: <PrivacyPolicy /> },
 //   { path: AppRoutes.TERMS, element: <TermsOfUse /> },
 // ]);
-
+console.log('0.000001');
 function App() {
   return (
     <AppProvider>
