@@ -2,31 +2,38 @@ import React from 'react';
 import './App.css';
 import SignIn from './SignIn';
 import { AppProvider } from './providers/AppProvider';
+import PublicRoute from './components/routes/PublicRoute';
+import PrivateRoute from './components/routes/PrivateRoute';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import ProvideRoute from './components/routes/ProvideRoute';
+import Chat from './Chat';
 
+export enum AppRoutes {
+  HOME = '*',
+  SIGN_IN = '/sign-in',
+  CHAT = '/chat',
+}
+const router = createBrowserRouter([
+  {
+    path: AppRoutes.HOME,
+    element: <ProvideRoute />,
+  },
+  {
+    path: AppRoutes.SIGN_IN,
+    element: <PublicRoute component={SignIn} />,
+  },
+  {
+    path: AppRoutes.CHAT,
+    element: <PrivateRoute component={Chat} />,
+  },
+]);
 
+console.log('0.000002');
 
-// export enum AppRoutes {
-//   SIGN_IN = '/sign-in',
-//   CHAT = '/CHAT',
-// }
-// const router = createBrowserRouter([
-
-//   {
-//     path: AppRoutes.SIGN_IN,
-//     element: <PublicRoute component={SignIn} />,
-//   },
-//   {
-//     path: AppRoutes.DASHBOARD,
-//     element: <PrivateRoute component={Dashboard} />,
-//   },
-//   { path: AppRoutes.PRIVACY, element: <PrivacyPolicy /> },
-//   { path: AppRoutes.TERMS, element: <TermsOfUse /> },
-// ]);
-console.log('0.000001');
 function App() {
   return (
     <AppProvider>
-      <SignIn />
+      <RouterProvider router={router} />
     </AppProvider>
   );
 }

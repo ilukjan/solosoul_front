@@ -2,20 +2,12 @@ import React, { useState } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
 import background from './assets/images/sign_in/sign_in_background_small@2x.jpg';
-import { signIn } from './services/requests';
+import { useAppState } from './providers/AppProvider.hooks';
 
 function SignIn() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const DEFAULT_ERRORS_VALUE = { username: false, password: false };
-  const [errors, setErrors] = useState(DEFAULT_ERRORS_VALUE);
-  const [isSignInLoading, setSignInLoading] = useState(false);
-
-  const handleSignIn = () => {
-    // setSignInLoading(true)
-    console.log(username, password);
-    signIn({ username, password });
-  };
+  const { handleSignIn, setSignInError, signInError, isSignInLoading } = useAppState();
 
   return (
     <Box
@@ -44,7 +36,6 @@ function SignIn() {
         <Box
           sx={{
             padding: '0px 24px 34px',
-            borderRadius: '24px',
             display: 'flex',
             flexDirection: 'column',
             alignItems: 'center',
@@ -69,6 +60,7 @@ function SignIn() {
               marginBottom: '16px',
               '& input': {
                 width: '100%',
+                textIndent: '20px',
                 height: '52px',
                 background: 'rgb(245,245,245)',
                 border: 'none',
@@ -78,7 +70,6 @@ function SignIn() {
                 fontFamily: 'Avenir Next',
                 fontWeight: 500,
                 fontSize: '17px',
-                paddingLeft: '23px',
                 '&:focus-visible': {
                   outline: 'none',
                 },
@@ -107,36 +98,47 @@ function SignIn() {
           >
             <Box className="textWrapper">
               <Typography>Username</Typography>
-              {errors.username && <Typography className="error">Username already exists</Typography>}
+              {/* {errors.username && <Typography className="error">Username already exists</Typography>} */}
             </Box>
             <input
               placeholder="Enter your username"
               type="email"
-              style={{
-                outline: errors.username ? '1px solid rgb(253, 37, 69)' : undefined,
-              }}
+              style={
+                {
+                  // outline: errors.username ? '1px solid rgb(253, 37, 69)' : undefined,
+                }
+              }
               value={username}
               onChange={(e) => {
-                setErrors(DEFAULT_ERRORS_VALUE);
+                setSignInError(false);
                 setUsername(e.target.value);
               }}
             ></input>
             <Box className="textWrapper">
               <Typography>Password</Typography>
-              {errors.password && <Typography className="error">Min 6 symbols</Typography>}
+              {/* {errors.password && <Typography className="error">Min 6 symbols</Typography>} */}
             </Box>
             <input
               placeholder="Enter your password"
               type="password"
-              style={{
-                outline: errors.password ? '1px solid rgb(253, 37, 69)' : undefined,
-              }}
+              style={
+                {
+                  // outline: errors.password ? '1px solid rgb(253, 37, 69)' : undefined,
+                }
+              }
               value={password}
               onChange={(e) => {
-                setErrors(DEFAULT_ERRORS_VALUE);
+                setSignInError(false);
                 setPassword(e.target.value);
               }}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter' && !isSignInLoading) {
+                  handleSignIn(username, password);
+                }
+              }}
             ></input>
+            {signInError && <Typography className="error">Invalid credentials</Typography>}
+
             <Typography
               onClick={() => {
                 // setRestorePasswordModalOpen(true);
@@ -168,7 +170,9 @@ function SignIn() {
               border: 'none',
               WebkitTapHighlightColor: 'transparent',
             }}
-            onClick={handleSignIn}
+            onClick={() => {
+              handleSignIn(username, password);
+            }}
           >
             {isSignInLoading ? (
               <CircularProgress
