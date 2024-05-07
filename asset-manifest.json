@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/solosoul_front/static/css/main.ba1d2be1.css",
-    "main.js": "/solosoul_front/static/js/main.f6e42354.js",
+    "main.js": "/solosoul_front/static/js/main.2b23b175.js",
     "static/media/sign_in_background_small@2x.jpg": "/solosoul_front/static/media/sign_in_background_small@2x.afe9ec4cc48bf4b03c52.jpg",
     "index.html": "/solosoul_front/index.html",
     "main.ba1d2be1.css.map": "/solosoul_front/static/css/main.ba1d2be1.css.map",
-    "main.f6e42354.js.map": "/solosoul_front/static/js/main.f6e42354.js.map"
+    "main.2b23b175.js.map": "/solosoul_front/static/js/main.2b23b175.js.map"
   },
   "entrypoints": [
     "static/css/main.ba1d2be1.css",
-    "static/js/main.f6e42354.js"
+    "static/js/main.2b23b175.js"
   ]
 }
