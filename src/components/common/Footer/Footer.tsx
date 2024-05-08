@@ -17,7 +17,7 @@ function Footer() {
         display: 'flex',
         justifyContent: 'space-evenly',
         background: 'lightgrey',
-        padding: '20px 0',
+        padding: '15px 0',
         '& div': {
           display: 'flex',
           flexDirection: 'column',
@@ -34,7 +34,7 @@ function Footer() {
           opacity: selectedAppView === APP_VIEW.MAIN ? 1 : 0.5,
         }}
       >
-        <ChatIcon sx={{ width: '80px', height: '80px' }} />
+        <ChatIcon sx={{ width: '50px', height: '50px' }} />
         <Typography>Chats</Typography>
       </Box>
       <Box
@@ -45,7 +45,7 @@ function Footer() {
           opacity: selectedAppView === APP_VIEW.SETTINGS ? 1 : 0.5,
         }}
       >
-        <SettingsApplicationsIcon sx={{ width: '80px', height: '80px' }} />
+        <SettingsApplicationsIcon sx={{ width: '50px', height: '50px' }} />
         <Typography>Settings</Typography>
       </Box>
     </Box>
