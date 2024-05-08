@@ -11,7 +11,7 @@ const ProvideRoute = () => {
 
 
   if (isUserAuthorized) {
-    return <Navigate to={AppRoutes.CHAT} />;
+    return <Navigate to={AppRoutes.MAIN} />;
   }
 
   if (!isUserAuthorized) {

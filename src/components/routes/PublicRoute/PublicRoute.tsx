@@ -9,7 +9,7 @@ const PublicRoute = ({ component: Component, ...rest }: { component: React.FC })
   const { isUserAuthorized } = useAppState();
 
   if (isUserAuthorized) {
-    return <Navigate to={AppRoutes.CHAT} />;
+    return <Navigate to={AppRoutes.MAIN} />;
   }
 
   return <Component {...rest} />;

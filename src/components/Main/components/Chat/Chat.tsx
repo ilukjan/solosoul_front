@@ -1,14 +1,30 @@
 import React, { useState } from 'react';
 import { Box, Typography } from '@mui/material';
 
-import { useAppState } from './providers/AppProvider.hooks';
 import SendIcon from '@mui/icons-material/Send';
+import { useAppState } from '../../../../providers/AppProvider.hooks';
+import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
+import { APP_VIEW } from '../../../../providers/AppProvider.types';
+
 function Chat() {
   const [message, setMessage] = useState('');
-  const { handleSendMessage, messages } = useAppState();
+  const {
+    handleSendMessage,
+    chatMessages,
+    setChatMessages,
+    setSelectedAppView,
+    setSelectedConversation,
+    selectedConversation,
+  } = useAppState();
   const handleSendMessageClick = () => {
     handleSendMessage(message);
     setMessage('');
+  };
+
+  const handleClickBack = () => {
+    setSelectedConversation(null);
+    setSelectedAppView(APP_VIEW.MAIN);
+    setChatMessages([]);
   };
 
   return (
@@ -34,6 +50,61 @@ function Chat() {
       >
         <Box
           sx={{
+            flexGrow: 1,
+            width: '100%',
+          }}
+        >
+          <Box
+            sx={{
+              cursor: 'pointer',
+              display: 'flex',
+              position: 'fixed',
+              justifyContent: 'space-between',
+              top: 0,
+              width: '100%',
+              maxWidth: '430px',
+              background: '#fff',
+            }}
+            onClick={handleClickBack}
+          >
+            <Box
+              sx={{
+                display: 'flex',
+                padding: '20px',
+              }}
+            >
+              <ArrowBackIosIcon />
+              <Typography>Back</Typography>
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                gap: '10px',
+                marginRight: '20px',
+              }}
+            >
+              <Typography>
+                {selectedConversation?.bot.username},{selectedConversation?.bot.age}
+              </Typography>
+              <Box
+                sx={{
+                  width: '40px',
+                  height: '40px',
+                  borderRadius: '50%',
+                  background: 'lightgrey',
+                  backgroundImage: `url(${selectedConversation?.bot.img})`,
+                  backgroundSize: 'contain',
+                  backgroundPosition: 'top',
+                  backgroundRepeat: 'no-repeat',
+                }}
+              ></Box>
+            </Box>
+          </Box>
+        </Box>
+        <Box
+          sx={{
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
@@ -41,7 +112,7 @@ function Chat() {
             marginBottom: '10px',
           }}
         >
-          {messages.map((message, index) => (
+          {chatMessages.map((message, index) => (
             <Box
               key={index}
               sx={{
@@ -74,7 +145,7 @@ function Chat() {
               height: '52px',
               background: 'rgb(245,245,245)',
               border: 'none',
-              borderRadius: '12px',
+              borderRadius: '4px',
               color: 'black',
               fontFamily: 'Avenir Next',
               fontWeight: 500,
@@ -125,7 +196,7 @@ function Chat() {
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
-              borderRadius: '12px',
+              borderRadius: '4px',
               border: 'none',
               WebkitTapHighlightColor: 'transparent',
             }}

@@ -6,12 +6,12 @@ import PublicRoute from './components/routes/PublicRoute';
 import PrivateRoute from './components/routes/PrivateRoute';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ProvideRoute from './components/routes/ProvideRoute';
-import Chat from './Chat';
+import Main from './components/Main/Main';
 
 export enum AppRoutes {
   HOME = '*',
   SIGN_IN = '/sign-in',
-  CHAT = '/chat',
+  MAIN = '/main',
 }
 const router = createBrowserRouter([
   {
@@ -23,12 +23,12 @@ const router = createBrowserRouter([
     element: <PublicRoute component={SignIn} />,
   },
   {
-    path: AppRoutes.CHAT,
-    element: <PrivateRoute component={Chat} />,
+    path: AppRoutes.MAIN,
+    element: <PrivateRoute component={Main} />,
   },
 ]);
 
-console.log('0.000002');
+console.log('0.000003');
 
 function App() {
   return (

@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 export type SignInResponse = {
   user_id: string;
   payment_subscription: {
@@ -11,7 +10,7 @@ export type SignInResponse = {
   token_valid_till: string;
 };
 
-  export type UserResponse = {
+export type UserResponse = {
   id: string;
   username: string;
   gender: string;
@@ -53,7 +52,7 @@ export async function signIn({ username, password }: { username: string; passwor
     })
     .then(function (response) {
       return response.data;
-    })
+    });
 }
 
 export async function sendMessage(id: string, message: string, token: string): Promise<any> {
@@ -72,4 +71,30 @@ export async function sendMessage(id: string, message: string, token: string): P
     });
 }
 
+export type GetAllConversationsResponse = Array<Conversation>;
 
+export type Conversation = {
+  id: string;
+  bot: ConversationBot;
+};
+
+export type ConversationBot = {
+  id: string;
+  username: string;
+  gender: string;
+  age: number;
+  profile: {
+    bio: string;
+  };
+  img: string;
+};
+
+export async function getAllConversations(userId: string, token: string): Promise<GetAllConversationsResponse> {
+  return axios
+    .get(process.env.REACT_APP_API_URL + 'api/conversation/all/' + userId, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then(function (response) {
+      return response.data;
+    });
+}

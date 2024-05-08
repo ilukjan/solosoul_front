@@ -1,6 +1,6 @@
 import { ReactNode, createContext, FC, useState, useEffect } from 'react';
-import { AppProviderContextType, Message } from './AppProvider.types';
-import { sendMessage, signIn } from '../services/requests';
+import { APP_VIEW, AppProviderContextType, Message } from './AppProvider.types';
+import { Conversation, GetAllConversationsResponse, getAllConversations, sendMessage, signIn } from '../services/requests';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { APP_STORAGE_KEYS } from '../services/constants';
 
@@ -9,17 +9,22 @@ export const AppContext = createContext<AppProviderContextType | null>(null);
 export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [userAccessToken, setUserAccessToken] = useState<string | null>(null);
   const [isSignInLoading, setSignInLoading] = useState(false);
+  const [userId, setUserId] = useState<string | null>(null);
+  const [userConversations, setUserConversations] = useState<GetAllConversationsResponse | null>(null);
   const [signInError, setSignInError] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([]);
-  const DIALOG_ID = '22dcaef0-01b9-47a9-8af1-8eafec0e0264';
+  const [chatMessages, setChatMessages] = useState<Message[]>([]);
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
+  const [selectedAppView, setSelectedAppView] = useState(APP_VIEW.MAIN)
 
   useEffect(() => {
     const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
     const access_token = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
+    const user_id = window.localStorage.getItem(APP_STORAGE_KEYS.USER_ID);
     console.log('access_token', access_token);
     if (token_expired_date) {
       if (new Date(token_expired_date) > new Date()) {
         setUserAccessToken(access_token);
+        setUserId(user_id);
       } else {
         window.localStorage.removeItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
         window.localStorage.removeItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
@@ -27,13 +32,25 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, []);
 
+
+  // GET CHATS
+  useEffect(() => {
+    if(userId && userAccessToken){
+      getAllConversations(userId, userAccessToken).then(response=>{
+        setUserConversations(response);
+      })
+    }
+  }, [userId, userAccessToken]);
+
   const handleSignIn = (username: string, password: string) => {
     setSignInLoading(true);
     signIn({ username, password })
       .then((response) => {
-        console.log('resp', response);
+        console.log('signIn response', response);
         setUserAccessToken(response.access_token);
+        setUserId(response.user_id)
         window.localStorage.setItem(APP_STORAGE_KEYS.ACCESS_TOKEN, response.access_token);
+        window.localStorage.setItem(APP_STORAGE_KEYS.USER_ID, response.user_id);
         window.localStorage.setItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL, response.token_valid_till);
       })
       .catch((err) => {
@@ -70,7 +87,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
           connection.on('ReceiveMessage', (ReceiveMessageResponse) => {
             console.log(1, 'ReceiveMessageResponse', typeof ReceiveMessageResponse, JSON.parse(ReceiveMessageResponse));
             const answerMessage = JSON.parse(ReceiveMessageResponse).message;
-            setMessages((prev) => [
+            setChatMessages((prev) => [
               ...prev,
               {
                 fromYou: false,
@@ -86,7 +103,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, [connection]);
 
   const handleSendMessage = (message: string) => {
-    setMessages((prev) => [
+    setChatMessages((prev) => [
       ...prev,
       {
         fromYou: true,
@@ -94,8 +111,8 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
       },
     ]);
 
-    if (userAccessToken) {
-      sendMessage(DIALOG_ID, message, userAccessToken);
+    if (userAccessToken && selectedConversation) {
+      sendMessage(selectedConversation.id, message, userAccessToken);
     }
   };
 
@@ -106,7 +123,13 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     signInError,
     setSignInError,
     handleSendMessage,
-    messages,
+    chatMessages,
+    userConversations,
+    selectedAppView,
+    setSelectedAppView,
+    setSelectedConversation,
+    setChatMessages,
+    selectedConversation
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
