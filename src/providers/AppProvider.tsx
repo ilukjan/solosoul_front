@@ -1,6 +1,14 @@
 import { ReactNode, createContext, FC, useState, useEffect } from 'react';
-import {  AppProviderContextType, Message } from './AppProvider.types';
-import { Conversation, GetAllConversationsResponse, UserProfileResponse, getAllConversations, getUserProfile, sendMessage, signIn } from '../services/requests';
+import { AppProviderContextType, Message, SocketResponseMessage } from './AppProvider.types';
+import {
+  Conversation,
+  GetAllConversationsResponse,
+  UserProfileResponse,
+  getAllConversations,
+  getUserProfile,
+  sendMessage,
+  signIn,
+} from '../services/requests';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { APP_STORAGE_KEYS } from '../services/constants';
 import { APP_VIEW } from '../utils/constants';
@@ -16,7 +24,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [signInError, setSignInError] = useState(false);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
-  const [selectedAppView, setSelectedAppView] = useState(APP_VIEW.MAIN)
+  const [selectedAppView, setSelectedAppView] = useState(APP_VIEW.MAIN);
 
   useEffect(() => {
     const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
@@ -34,18 +42,17 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, []);
 
-
   // GET CHATS
   useEffect(() => {
-    if(userId && userAccessToken){
-      getAllConversations(userId, userAccessToken).then(response=>{
+    if (userId && userAccessToken) {
+      getAllConversations(userId, userAccessToken).then((response) => {
         setUserConversations(response);
-      })
+      });
 
-      getUserProfile(userId, userAccessToken).then(response=>{
+      getUserProfile(userId, userAccessToken).then((response) => {
         console.log('getUserProfile', response);
-        setUserProfile(response)
-      })
+        setUserProfile(response);
+      });
     }
   }, [userId, userAccessToken]);
 
@@ -55,7 +62,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
       .then((response) => {
         console.log('signIn response', response);
         setUserAccessToken(response.access_token);
-        setUserId(response.user_id)
+        setUserId(response.user_id);
         window.localStorage.setItem(APP_STORAGE_KEYS.ACCESS_TOKEN, response.access_token);
         window.localStorage.setItem(APP_STORAGE_KEYS.USER_ID, response.user_id);
         window.localStorage.setItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL, response.token_valid_till);
@@ -92,13 +99,18 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
           console.log('Connected');
 
           connection.on('ReceiveMessage', (ReceiveMessageResponse) => {
-            console.log(1, 'ReceiveMessageResponse', typeof ReceiveMessageResponse, JSON.parse(ReceiveMessageResponse));
-            const answerMessage = JSON.parse(ReceiveMessageResponse).message;
+            console.log('ReceiveMessageResponse', typeof ReceiveMessageResponse, JSON.parse(ReceiveMessageResponse));
+
+            const answerMessage: SocketResponseMessage = JSON.parse(ReceiveMessageResponse);
+
             setChatMessages((prev) => [
               ...prev,
               {
                 fromYou: false,
-                text: answerMessage,
+                text: answerMessage.message,
+                timestamp: `${new Date(answerMessage.timestamp).getHours()}:${new Date(
+                  answerMessage.timestamp
+                ).getMinutes()}`,
               },
             ]);
           });
@@ -115,6 +127,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
       {
         fromYou: true,
         text: message,
+        timestamp: `${new Date().getHours()}:${new Date().getMinutes()}`,
       },
     ]);
 
@@ -137,7 +150,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setSelectedConversation,
     setChatMessages,
     selectedConversation,
-    userProfile
+    userProfile,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
