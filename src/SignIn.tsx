@@ -34,12 +34,17 @@ function SignIn() {
         <Box
           sx={{
             position: 'relative',
+            minHeight: '250px',
+            width: '250px',
+            backgroundImage: `url(${background})`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
           }}
         >
-          <img style={{ maxWidth: '100%' }} src={background} alt="bg"></img>
           <Box
             sx={{
-              boxShadow: 'inset 0px 0px 50px 32px #0b1e25',
+              boxShadow: 'inset 0px 0px 50px 55px #0b1e25',
               position: 'absolute',
               top: 0,
               left: 0,
@@ -168,8 +173,8 @@ function SignIn() {
                   // setRestorePasswordModalOpen(true);
                 }}
                 sx={{
-                  fontWeight: '600!important',
-                  color: 'rgb(37, 107, 253)!important',
+                  fontFamily: 'sfpro600',
+                  color: `${APP_COLORS.blue}!important`,
                   textAlign: 'right',
                   marginTop: '-8px',
                   cursor: 'pointer',
@@ -182,11 +187,11 @@ function SignIn() {
             <button
               style={{
                 cursor: 'pointer',
-                background: '#256BFD',
+                background: APP_COLORS.blue,
                 fontSize: '15px',
                 color: '#fff',
-                fontWeight: 600,
-                fontFamily: 'Avenir Next',
+                fontFamily: 'sfpro600',
+
                 textTransform: 'none',
                 height: '56px',
                 width: '100%',
