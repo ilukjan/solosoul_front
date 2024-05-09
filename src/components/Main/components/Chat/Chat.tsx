@@ -21,8 +21,10 @@ function Chat() {
   } = useAppState();
 
   const handleSendMessageClick = () => {
-    handleSendMessage(message);
-    setMessage('');
+    if (message !== '') {
+      handleSendMessage(message);
+      setMessage('');
+    }
   };
 
   const handleClickBack = () => {
