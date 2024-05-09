@@ -6,3 +6,39 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+
+@font-face {
+  font-family: 'sfpro400';
+  font-style: normal;
+  line-height: normal;
+  font-weight: 400;
+  src:
+    url('../src/assets/fonts/SFUIDisplay-Regular.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'sfpro500';
+  font-style: normal;
+  line-height: normal;
+  font-weight: 500;
+  src:
+    url('../src/assets/fonts/SFUIDisplay-Medium.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'sfpro600';
+  font-style: normal;
+  line-height: normal;
+  font-weight: 600;
+  src:
+    url('../src/assets/fonts/SFUIDisplay-Semibold.ttf') format('truetype');
+}
+
+@font-face {
+  font-family: 'sfpro700';
+  font-style: normal;
+  line-height: normal;
+  font-weight: 700;
+  src:
+    url('../src/assets/fonts/SFUIDisplay-Bold.ttf') format('truetype');
+}

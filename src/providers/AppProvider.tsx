@@ -1,8 +1,9 @@
 import { ReactNode, createContext, FC, useState, useEffect } from 'react';
-import { APP_VIEW, AppProviderContextType, Message } from './AppProvider.types';
-import { Conversation, GetAllConversationsResponse, getAllConversations, sendMessage, signIn } from '../services/requests';
+import {  AppProviderContextType, Message } from './AppProvider.types';
+import { Conversation, GetAllConversationsResponse, UserProfileResponse, getAllConversations, getUserProfile, sendMessage, signIn } from '../services/requests';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { APP_STORAGE_KEYS } from '../services/constants';
+import { APP_VIEW } from '../utils/constants';
 
 export const AppContext = createContext<AppProviderContextType | null>(null);
 
@@ -11,6 +12,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [isSignInLoading, setSignInLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
   const [userConversations, setUserConversations] = useState<GetAllConversationsResponse | null>(null);
+  const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   const [signInError, setSignInError] = useState(false);
   const [chatMessages, setChatMessages] = useState<Message[]>([]);
   const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
@@ -38,6 +40,11 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     if(userId && userAccessToken){
       getAllConversations(userId, userAccessToken).then(response=>{
         setUserConversations(response);
+      })
+
+      getUserProfile(userId, userAccessToken).then(response=>{
+        console.log('getUserProfile', response);
+        setUserProfile(response)
       })
     }
   }, [userId, userAccessToken]);
@@ -129,7 +136,8 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setSelectedAppView,
     setSelectedConversation,
     setChatMessages,
-    selectedConversation
+    selectedConversation,
+    userProfile
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

@@ -4,7 +4,7 @@ import { Box, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
 import { useAppState } from '../../../../providers/AppProvider.hooks';
 import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import { APP_VIEW } from '../../../../providers/AppProvider.types';
+import { APP_VIEW } from '../../../../utils/constants';
 
 function Chat() {
   const [message, setMessage] = useState('');
@@ -110,6 +110,7 @@ function Chat() {
             flexDirection: 'column',
             gap: '5px',
             marginBottom: '10px',
+            overflow: 'auto',
           }}
         >
           {chatMessages.map((message, index) => (

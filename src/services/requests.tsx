@@ -98,3 +98,52 @@ export async function getAllConversations(userId: string, token: string): Promis
       return response.data;
     });
 }
+
+
+export type UserProfileResponse = {
+  id: string;
+  username: string;
+  gender: string;
+  age: number;
+  profile: {
+    level: {
+      level: string;
+      progress: number;
+    };
+    pretty: {
+      progress: number;
+    };
+    drive: {
+      progress: number;
+    };
+    erudition: {
+      progress: number;
+    };
+    romantic: {
+      progress: number;
+    };
+    horny: {
+      progress: number;
+    };
+  };
+  search_settings: {
+    search_gender: string;
+    search_age_from: number;
+    search_age_to: number;
+  };
+  img: string;
+  subscription: {
+    id: string;
+    expire_at: string;
+  };
+};
+
+export async function getUserProfile(id: string, token: string): Promise<UserProfileResponse> {
+  return axios
+    .get(process.env.REACT_APP_API_URL + 'api/user/' + id, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then(function (response) {
+      return response.data;
+    });
+}

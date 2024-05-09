@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 
 import { useAppState } from '../../providers/AppProvider.hooks';
-import { APP_VIEW } from '../../providers/AppProvider.types';
 import Chat from './components/Chat/Chat';
 import Chats from './components/Chats/Chats';
 import Settings from './components/Settings/Settings';
+import { APP_VIEW } from '../../utils/constants';
 
 function Main() {
   const { selectedAppView } = useAppState();

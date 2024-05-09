@@ -1,4 +1,4 @@
-import { Conversation, GetAllConversationsResponse } from '../services/requests';
+import { Conversation, GetAllConversationsResponse, UserProfileResponse } from '../services/requests';
 
 export type AppProviderContextType = {
   isUserAuthorized: boolean;
@@ -14,15 +14,10 @@ export type AppProviderContextType = {
   setSelectedAppView: (type: string) => void;
   selectedConversation: Conversation | null;
   setSelectedConversation: (value: Conversation | null) => void;
+  userProfile: UserProfileResponse | null;
 };
 
 export type Message = {
   fromYou: boolean;
   text: string;
-};
-
-export const APP_VIEW = {
-  MAIN: 'main',
-  CHAT: 'chat',
-  SETTINGS: 'settings',
 };

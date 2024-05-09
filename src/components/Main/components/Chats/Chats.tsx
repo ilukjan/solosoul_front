@@ -3,8 +3,9 @@ import { Box, Typography } from '@mui/material';
 
 import { useAppState } from '../../../../providers/AppProvider.hooks';
 import Footer from '../../../common/Footer/Footer';
-import { APP_VIEW } from '../../../../providers/AppProvider.types';
 import { Conversation } from '../../../../services/requests';
+import { APP_COLORS, APP_VIEW } from '../../../../utils/constants';
+import ReadSvg from '../../../../assets/svg/readed.svg';
 
 function Chats() {
   const { setSelectedConversation, setSelectedAppView, userConversations } = useAppState();
@@ -31,28 +32,54 @@ function Chats() {
           margin: 'auto',
           flexDirection: 'column',
           alignItems: 'center',
-          // justifyContent: 'flex-end',
-          backgroundColor: '#EEE',
         }}
       >
+        <Box
+          sx={{
+            width: '100%',
+          }}
+        >
+          <Box
+            sx={{
+              cursor: 'pointer',
+              display: 'flex',
+              position: 'fixed',
+              justifyContent: 'center',
+              top: 0,
+              width: '100%',
+              maxWidth: '430px',
+              background: APP_COLORS.black,
+              padding: '20px 0',
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: 'sfpro600',
+                color: '#fff',
+              }}
+            >
+              Chats
+            </Typography>
+          </Box>
+        </Box>
         <Box
           sx={{
             flexGrow: 1,
             width: '100%',
             display: 'flex',
             flexDirection: 'column',
-            gap: '5px',
-            marginBottom: '10px',
+            background: APP_COLORS.darkBlack,
+            overflow: 'auto',
+            marginTop: '64px',
+            paddingTop: '10px',
           }}
         >
           {userConversations?.map((conversation, index) => (
             <Box
               key={index}
               sx={{
-                padding: '10px',
-                borderBottom: '1px solid lightgray',
+                padding: '7px 0 7px 10px',
                 display: 'flex',
-                alignItems: 'center',
                 gap: '20px',
                 cursor: 'pointer',
               }}
@@ -62,8 +89,8 @@ function Chats() {
             >
               <Box
                 sx={{
-                  width: '50px',
-                  height: '50px',
+                  minWidth: '60px',
+                  minHeight: '60px',
                   borderRadius: '50%',
                   background: 'lightgray',
                   backgroundImage: `url(${conversation.bot.img})`,
@@ -72,19 +99,62 @@ function Chats() {
                   backgroundRepeat: 'no-repeat',
                 }}
               ></Box>
-              <Box>
-                <Typography variant="h5">{conversation.bot.username}</Typography>
-                <Typography
+              <Box
+                sx={{
+                  borderBottom: `0.5px solid ${APP_COLORS.border}`,
+                  width: '100%',
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                }}
+              >
+                <Box>
+                  <Typography
+                    sx={{
+                      fontFamily: 'sfpro500',
+                      color: APP_COLORS.textMain,
+                      letterSpacing: '0.5px',
+                    }}
+                  >
+                    {conversation.bot.username}
+                  </Typography>
+                  <Typography
+                    sx={{
+                      fontFamily: 'sfpro400',
+                      color: APP_COLORS.textSecondary,
+                    }}
+                  >
+                    {conversation.bot.gender}, {conversation.bot.age}
+                  </Typography>
+                </Box>
+                <Box
                   sx={{
-                    opacity: 0.5,
+                    marginRight: '10px',
                   }}
                 >
-                  {conversation.bot.gender}, {conversation.bot.age}
-                </Typography>
+                  <Box
+                    sx={{
+                      display: 'flex',
+                      gap: '4px',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                    }}
+                  >
+                    <img src={ReadSvg} alt="read"></img>
+                    <Typography
+                      sx={{
+                        fontFamily: 'sfpro400',
+                        color: APP_COLORS.textSecondary,
+                      }}
+                    >
+                      10:{conversation.bot.age + 14}
+                    </Typography>
+                  </Box>
+                </Box>
               </Box>
             </Box>
           ))}
         </Box>
+
         <Footer />
       </Box>
     </Box>

@@ -1,13 +1,12 @@
 import React from 'react';
 import { Box, Typography } from '@mui/material';
 
-import SettingsApplicationsIcon from '@mui/icons-material/SettingsApplications';
-import ChatIcon from '@mui/icons-material/Chat';
+import ChatIcon from '../../../assets/svg/chats_icon.svg';
 import { useAppState } from '../../../providers/AppProvider.hooks';
-import { APP_VIEW } from '../../../providers/AppProvider.types';
+import { APP_COLORS, APP_VIEW } from '../../../utils/constants';
 
 function Footer() {
-  const { selectedAppView, setSelectedAppView } = useAppState();
+  const { selectedAppView, setSelectedAppView, userProfile } = useAppState();
 
   return (
     <Box
@@ -16,13 +15,20 @@ function Footer() {
         position: 'relative',
         display: 'flex',
         justifyContent: 'space-evenly',
-        background: 'lightgrey',
-        padding: '15px 0',
+        background: APP_COLORS.black,
+        padding: '15px 0 24px',
         '& div': {
           display: 'flex',
           flexDirection: 'column',
           alignItems: 'center',
           cursor: 'pointer',
+          WebkitTapHighlightColor: 'transparent',
+          '& p': {
+            fontFamily: 'sfpro500',
+            fontSize: '10px',
+            color: '#fff',
+            marginTop: '4px',
+          },
         },
       }}
     >
@@ -34,7 +40,7 @@ function Footer() {
           opacity: selectedAppView === APP_VIEW.MAIN ? 1 : 0.5,
         }}
       >
-        <ChatIcon sx={{ width: '50px', height: '50px' }} />
+        <img src={ChatIcon} alt="chats"></img>
         <Typography>Chats</Typography>
       </Box>
       <Box
@@ -45,7 +51,17 @@ function Footer() {
           opacity: selectedAppView === APP_VIEW.SETTINGS ? 1 : 0.5,
         }}
       >
-        <SettingsApplicationsIcon sx={{ width: '50px', height: '50px' }} />
+        <Box
+          sx={{
+            width: '25px',
+            height: '25px',
+            background: 'lightgrey',
+            borderRadius: '50%',
+            backgroundImage: `url(${userProfile?.img})`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+          }}
+        ></Box>
         <Typography>Settings</Typography>
       </Box>
     </Box>
