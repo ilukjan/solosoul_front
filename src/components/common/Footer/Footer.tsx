@@ -16,6 +16,7 @@ function Footer() {
         display: 'flex',
         justifyContent: 'space-evenly',
         background: APP_COLORS.black,
+        borderTop: `0.5px solid ${APP_COLORS.border}`,
         padding: '15px 0 24px',
         '& div': {
           display: 'flex',

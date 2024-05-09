@@ -215,7 +215,7 @@ function Chat() {
         <Box
           sx={{
             borderTop: `0.5px solid ${APP_COLORS.border}`,
-            minHeight: '60px',
+            minHeight: '84px',
             background: APP_COLORS.black,
             width: '100%',
           }}

@@ -89,6 +89,7 @@ function SignIn() {
                   border: '1px solid grey',
                   borderRadius: '12px',
                   marginBottom: '16px',
+                  padding: 0,
                   color: APP_COLORS.textMain,
                   fontFamily: 'sfpro500',
                   fontSize: '17px',

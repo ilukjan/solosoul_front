@@ -78,7 +78,7 @@ function Chats() {
             <Box
               key={index}
               sx={{
-                padding: '7px 0 7px 10px',
+                padding: '7px 0 0px 10px',
                 display: 'flex',
                 gap: '20px',
                 cursor: 'pointer',
@@ -90,7 +90,9 @@ function Chats() {
               <Box
                 sx={{
                   minWidth: '60px',
+                  maxWidth: '60px',
                   minHeight: '60px',
+                  maxHeight: '60px',
                   borderRadius: '50%',
                   background: 'lightgray',
                   backgroundImage: `url(${conversation.bot.img})`,
@@ -105,6 +107,7 @@ function Chats() {
                   width: '100%',
                   display: 'flex',
                   justifyContent: 'space-between',
+                  paddingBottom: '20px'
                 }}
               >
                 <Box>
