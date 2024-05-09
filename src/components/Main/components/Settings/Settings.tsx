@@ -1,10 +1,39 @@
 import React from 'react';
-import { Box, Typography } from '@mui/material';
+import { Box, LinearProgress, Typography } from '@mui/material';
 import ArrowBack from '../../../../assets/svg/arrow_back.svg';
 
 import Footer from '../../../common/Footer/Footer';
 import { APP_COLORS, APP_VIEW } from '../../../../utils/constants';
 import { useAppState } from '../../../../providers/AppProvider.hooks';
+import { linearProgressClasses } from '@mui/material/LinearProgress';
+
+const CustomProgress = ({
+  progress,
+  color,
+  secondaryColor,
+}: {
+  progress: number | undefined;
+  color: string;
+  secondaryColor: string;
+}) => {
+  return (
+    <LinearProgress
+      sx={{
+        height: 10,
+        borderRadius: 5,
+        [`&.${linearProgressClasses.colorPrimary}`]: {
+          backgroundColor: secondaryColor,
+        },
+        [`& .${linearProgressClasses.bar}`]: {
+          borderRadius: 10,
+          backgroundColor: color,
+        },
+      }}
+      variant="determinate"
+      value={Number(progress) * 10}
+    />
+  );
+};
 
 function Settings() {
   const { setSelectedAppView, userProfile } = useAppState();
@@ -12,6 +41,7 @@ function Settings() {
     setSelectedAppView(APP_VIEW.MAIN);
   };
   console.log('user', userProfile);
+
   return (
     <Box
       sx={{
@@ -46,6 +76,7 @@ function Settings() {
               maxWidth: '430px',
               padding: '20px 0',
               zIndex: 9,
+              boxShadow: 'inset 0px 55px 55px -43px rgba(66, 68, 90, 1)',
             }}
             onClick={handleClickBack}
           >
@@ -126,13 +157,9 @@ function Settings() {
               </Typography>
             </Box>
           </Box>
-
           <Box
             sx={{
-              background: APP_COLORS.black,
-              borderRadius: '10px',
-              padding: '10px 0',
-              margin: '10px',
+              marginBottom: '20px',
               '& .title': {
                 fontFamily: 'sfpro400',
                 fontSize: '14px',
@@ -152,13 +179,87 @@ function Settings() {
                 margin: '10px 0',
                 opacity: 0.5,
               },
+              '& .MuiLinearProgress-root': {
+                height: '20px',
+                borderRadius: '10px',
+                margin: '10px',
+              },
+              '& .MuiLinearProgress-bar': {
+                borderRadius: '10px',
+              },
             }}
           >
-            <Typography className="title">Gender</Typography>
-            <Typography className="subTitle">{userProfile?.gender}</Typography>
-            <Box className="divider"></Box>
-            <Typography className="title">Age</Typography>
-            <Typography className="subTitle">{userProfile?.age}</Typography>
+            <Box
+              sx={{
+                background: APP_COLORS.black,
+                borderRadius: '10px',
+                padding: '10px 0',
+                margin: '10px',
+              }}
+            >
+              <Typography className="title">Gender</Typography>
+              <Typography className="subTitle">{userProfile?.gender}</Typography>
+              <Box className="divider"></Box>
+              <Typography className="title">Age</Typography>
+              <Typography className="subTitle">{userProfile?.age}</Typography>
+              <Box className="divider"></Box>
+              <Typography className="title">Search for</Typography>
+              <Typography className="subTitle">{userProfile?.search_settings.search_gender}</Typography>
+              <Box className="divider"></Box>
+              <Typography className="title">Search age</Typography>
+              <Typography className="subTitle">
+                {userProfile?.search_settings.search_age_from} - {userProfile?.search_settings.search_age_to}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                margin: '30px 10px 20px',
+              }}
+            >
+              <Typography className="subTitle">
+                <span style={{ color: APP_COLORS.textMain, fontSize: '16px' }}>Level: </span>
+                {userProfile?.profile.level.level}
+              </Typography>
+              <CustomProgress progress={userProfile?.profile.level.progress} color="#EEE" secondaryColor="#555" />
+            </Box>
+            <Box
+              sx={{
+                background: APP_COLORS.black,
+                borderRadius: '10px',
+                padding: '10px 0',
+                margin: '10px',
+              }}
+            >
+              <Typography className="title">Drive</Typography>
+              <CustomProgress progress={userProfile?.profile.drive.progress} color="#4caf50" secondaryColor="#1b5e20" />
+              <Box className="divider"></Box>
+              <Typography className="title">Erudition</Typography>
+              <CustomProgress
+                progress={userProfile?.profile.erudition.progress}
+                color="#03a9f4"
+                secondaryColor="#01579b"
+              />
+
+              <Box className="divider"></Box>
+              <Typography className="title">Horny</Typography>
+              <CustomProgress progress={userProfile?.profile.horny.progress} color="#ff9800" secondaryColor="#e65100" />
+
+              <Box className="divider"></Box>
+              <Typography className="title">Pretty</Typography>
+              <CustomProgress
+                progress={userProfile?.profile.pretty.progress}
+                color="#ef5350"
+                secondaryColor="#c62828"
+              />
+
+              <Box className="divider"></Box>
+              <Typography className="title">Romantic</Typography>
+              <CustomProgress
+                progress={userProfile?.profile.romantic.progress}
+                color="#ba68c8"
+                secondaryColor="#7b1fa2"
+              />
+            </Box>
           </Box>
         </Box>
 

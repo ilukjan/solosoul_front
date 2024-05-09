@@ -145,8 +145,8 @@ function Chat() {
                   borderRadius: '50%',
                   background: 'lightgrey',
                   backgroundImage: `url(${selectedConversation?.bot.img})`,
-                  backgroundSize: 'contain',
-                  backgroundPosition: 'top',
+                  backgroundSize: 'cover',
+                  backgroundPosition: 'center',
                   backgroundRepeat: 'no-repeat',
                 }}
               ></Box>
