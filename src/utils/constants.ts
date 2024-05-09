@@ -3,7 +3,8 @@ export const APP_COLORS = {
   darkBlack: '#000000',
   border: "#545458",
   textMain: "#FFFFFF",
-  textSecondary: "#8E8E93"
+  textSecondary: "#8E8E93",
+  blue: '#3B83F6'
 }
 
 export const APP_VIEW = {

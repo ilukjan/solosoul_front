@@ -113,6 +113,7 @@ function Chats() {
                       fontFamily: 'sfpro500',
                       color: APP_COLORS.textMain,
                       letterSpacing: '0.5px',
+                      fontSize: '16px',
                     }}
                   >
                     {conversation.bot.username}
@@ -121,6 +122,7 @@ function Chats() {
                     sx={{
                       fontFamily: 'sfpro400',
                       color: APP_COLORS.textSecondary,
+                      fontSize: '15px',
                     }}
                   >
                     {conversation.bot.gender}, {conversation.bot.age}
