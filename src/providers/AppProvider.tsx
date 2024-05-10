@@ -1,8 +1,9 @@
 import { ReactNode, createContext, FC, useState, useEffect } from 'react';
-import { AppProviderContextType, Message, SocketResponseMessage } from './AppProvider.types';
+import { AppProviderContextType, Message } from './AppProvider.types';
 import {
   Conversation,
   GetAllConversationsResponse,
+  SocketResponseMessage,
   UserProfileResponse,
   getAllConversations,
   getUserProfile,
@@ -42,10 +43,11 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, []);
 
-  // GET CHATS
+  // GET DATA
   useEffect(() => {
     if (userId && userAccessToken) {
       getAllConversations(userId, userAccessToken).then((response) => {
+        console.log('getAllConversations', response);
         setUserConversations(response);
       });
 
@@ -107,9 +109,9 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
               ...prev,
               {
                 fromYou: false,
-                text: answerMessage.message,
-                timestamp: `${new Date(answerMessage.timestamp).getHours()}:${new Date(
-                  answerMessage.timestamp
+                text: answerMessage.Message,
+                timestamp: `${new Date(answerMessage.Timestamp).getHours()}:${new Date(
+                  answerMessage.Timestamp
                 ).getMinutes()}`,
               },
             ]);

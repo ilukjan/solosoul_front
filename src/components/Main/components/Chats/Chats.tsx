@@ -34,6 +34,7 @@ function Chats() {
             margin: 'auto',
             flexDirection: 'column',
             alignItems: 'center',
+            position: 'relative',
           }}
         >
           <Box
@@ -130,7 +131,7 @@ function Chats() {
                         fontSize: '15px',
                       }}
                     >
-                      {conversation.bot.gender}, {conversation.bot.age}
+                      {conversation.bot.settings.gender}, {conversation.bot.settings.age}
                     </Typography>
                   </Box>
                   <Box
@@ -153,7 +154,7 @@ function Chats() {
                           color: APP_COLORS.textSecondary,
                         }}
                       >
-                        10:{conversation.bot.age + 14}
+                        10:{conversation.bot.settings.age + 14}
                       </Typography>
                     </Box>
                   </Box>
@@ -165,7 +166,7 @@ function Chats() {
             sx={{
               width: '50px',
               height: '50px',
-              position: 'fixed',
+              position: 'absolute',
               bottom: '110px',
               right: '25px',
               borderRadius: '50%',

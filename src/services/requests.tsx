@@ -81,8 +81,10 @@ export type Conversation = {
 export type ConversationBot = {
   id: string;
   username: string;
-  gender: string;
-  age: number;
+  settings: {
+    gender: string;
+    age: number;
+  };
   profile: {
     bio: string;
   };
@@ -147,3 +149,14 @@ export async function getUserProfile(id: string, token: string): Promise<UserPro
       return response.data;
     });
 }
+
+export type SocketResponseMessage = {
+  ConversationId: string;
+  Id: string;
+  UserId: string;
+  BotId: string;
+  FromId: string;
+  Timestamp: string;
+  Status: number;
+  Message: string;
+};

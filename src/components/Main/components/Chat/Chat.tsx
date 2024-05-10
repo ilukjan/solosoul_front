@@ -116,7 +116,7 @@ function Chat() {
                   fontSize: '17px',
                 }}
               >
-                {selectedConversation?.bot.username}, {selectedConversation?.bot.age}
+                {selectedConversation?.bot.username}, {selectedConversation?.bot.settings.age}
               </Typography>
               <Typography
                 sx={{
