@@ -1,7 +1,6 @@
 import { ReactNode, createContext, FC, useState, useEffect } from 'react';
-import { AppProviderContextType, ConversationsState, Message } from './AppProvider.types';
+import { AppProviderContextType, ConversationsState, Message, SocketReceiveMessageType, SocketSystemMessageType } from './AppProvider.types';
 import {
-  SocketResponseMessage,
   UserProfileResponse,
   getAllConversations,
   getUserProfile,
@@ -25,7 +24,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [selectedAppView, setSelectedAppView] = useState(APP_VIEW.MAIN);
   const [selectedBotId, setSelectedBotId] = useState<string | null>(null);
-  // const [advertisement, setAdvertisement] = useState<ConversationsState>([]);
+  const [advertisement, setAdvertisement] = useState<string | null>('null');
 
   useEffect(() => {
     const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
@@ -111,7 +110,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
           connection.on('ReceiveMessage', (ReceiveMessageResponse) => {
             console.log('ReceiveMessageResponse', typeof ReceiveMessageResponse, JSON.parse(ReceiveMessageResponse));
 
-            const answerMessage: SocketResponseMessage = JSON.parse(ReceiveMessageResponse);
+            const answerMessage: SocketReceiveMessageType = JSON.parse(ReceiveMessageResponse);
 
             setConversations((prev) => {
               const updatedConversations = prev.map((conv) => {
@@ -141,7 +140,12 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
           connection.on('SystemMessage', (ReceiveMessageResponse) => {
             console.log('SystemMessage', JSON.parse(ReceiveMessageResponse));
 
-            // const answerMessage: SocketResponseMessage = JSON.parse(ReceiveMessageResponse);
+            const answerMessage: SocketSystemMessageType = JSON.parse(ReceiveMessageResponse);
+            if(answerMessage.UserId){
+                console.log('received tip');
+            }else{
+              setAdvertisement(answerMessage.Message)
+            }
           });
         } catch (error) {
           console.log('Receive Connection failed: ' + error);
@@ -191,7 +195,10 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     selectedConversationId,
     userProfile,
     conversations,
-    selectedBotId, setSelectedBotId
+    selectedBotId,
+    setSelectedBotId,
+    advertisement,
+    setAdvertisement,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

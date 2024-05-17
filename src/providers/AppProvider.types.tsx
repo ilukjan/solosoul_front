@@ -15,6 +15,8 @@ export type AppProviderContextType = {
   userProfile: UserProfileResponse | null;
   selectedBotId: string | null;
   setSelectedBotId: (type: string | null) => void;
+  advertisement: string | null;
+  setAdvertisement: (type: string | null) => void;
 };
 
 export type Message = {
@@ -28,3 +30,22 @@ export type ConversationsState = Array<{
   bot: ConversationBot;
   messages: Message[];
 }>;
+
+export type SocketReceiveMessageType = {
+  ConversationId: string;
+  Id: string;
+  UserId: string;
+  BotId: string;
+  FromId: string;
+  Timestamp: string;
+  Status: number;
+  Message: string;
+};
+
+export type SocketSystemMessageType = {
+  UserId?: string;
+  Id: string;
+  MessageType: number;
+  Timestamp: string;
+  Message: string;
+};

@@ -7,6 +7,7 @@ import { Conversation } from '../../../../services/requests';
 import { APP_COLORS, APP_VIEW } from '../../../../utils/constants';
 import ReadSvg from '../../../../assets/svg/readed.svg';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
+import Advertisement from './Advertisement';
 
 function Chats() {
   const { setSelectedConversationId, setSelectedAppView, conversations } = useAppState();
@@ -74,9 +75,10 @@ function Chats() {
               background: APP_COLORS.darkBlack,
               overflow: 'auto',
               marginTop: '64px',
-              paddingTop: '10px',
             }}
           >
+            <Advertisement />
+            <Box height={'10px'}></Box>
             {conversations?.map((conversation, index) => (
               <Box
                 key={index}
