@@ -24,7 +24,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [selectedAppView, setSelectedAppView] = useState(APP_VIEW.MAIN);
   const [selectedBotId, setSelectedBotId] = useState<string | null>(null);
-  const [advertisement, setAdvertisement] = useState<string | null>('null');
+  const [advertisement, setAdvertisement] = useState<string | null>(null);
 
   useEffect(() => {
     const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
