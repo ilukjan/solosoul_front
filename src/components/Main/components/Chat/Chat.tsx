@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import ArrowBack from '../../../../assets/svg/arrow_back.svg';
 
@@ -13,11 +13,11 @@ function Chat() {
   const [message, setMessage] = useState('');
   const {
     handleSendMessage,
-    chatMessages,
-    setChatMessages,
     setSelectedAppView,
-    setSelectedConversation,
-    selectedConversation,
+    setSelectedConversationId,
+    selectedConversationId,
+    conversations,
+    setSelectedBotId,
   } = useAppState();
 
   const handleSendMessageClick = () => {
@@ -28,17 +28,25 @@ function Chat() {
   };
 
   const handleClickBack = () => {
-    setSelectedConversation(null);
+    setSelectedConversationId(null);
     setSelectedAppView(APP_VIEW.MAIN);
-    setChatMessages([]);
   };
+
+  const selectedConversation = useMemo(
+    () => conversations.find((chat) => chat.id === selectedConversationId),
+    [selectedConversationId, conversations]
+  );
 
   useEffect(() => {
     var container = document.getElementById('messages_container');
     if (container) {
       container.scrollTop = container.scrollHeight;
     }
-  }, [chatMessages]);
+  }, [selectedConversation?.messages]);
+
+  const handleBotClick = (botId: string | undefined) => {
+    setSelectedBotId(botId ?? null);
+  };
 
   return (
     <Box
@@ -79,10 +87,11 @@ function Chat() {
               maxWidth: '430px',
               backgroundColor: APP_COLORS.black,
               height: '64px',
+              WebkitTapHighlightColor: 'transparent',
             }}
-            onClick={handleClickBack}
           >
             <Box
+              onClick={handleClickBack}
               sx={{
                 display: 'flex',
                 gap: '8px',
@@ -103,6 +112,7 @@ function Chat() {
               </Typography>
             </Box>
             <Box
+              onClick={() => handleBotClick(selectedConversation?.bot?.id)}
               sx={{
                 display: 'flex',
                 flexDirection: 'column',
@@ -131,6 +141,7 @@ function Chat() {
               </Typography>
             </Box>
             <Box
+              onClick={() => handleBotClick(selectedConversation?.bot?.id)}
               sx={{
                 display: 'flex',
                 justifyContent: 'flex-end',
@@ -166,7 +177,7 @@ function Chat() {
             overflow: 'auto',
           }}
         >
-          {chatMessages.map((message, index) => (
+          {selectedConversation?.messages.map((message, index) => (
             <Box
               key={index}
               sx={{

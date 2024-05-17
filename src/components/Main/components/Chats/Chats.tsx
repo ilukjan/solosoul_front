@@ -9,10 +9,10 @@ import ReadSvg from '../../../../assets/svg/readed.svg';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 
 function Chats() {
-  const { setSelectedConversation, setSelectedAppView, userConversations } = useAppState();
+  const { setSelectedConversationId, setSelectedAppView, conversations } = useAppState();
   const [open, setOpen] = useState(false);
   const handleConversationClick = (conversation: Conversation) => {
-    setSelectedConversation(conversation);
+    setSelectedConversationId(conversation.id);
     setSelectedAppView(APP_VIEW.CHAT);
   };
 
@@ -77,7 +77,7 @@ function Chats() {
               paddingTop: '10px',
             }}
           >
-            {userConversations?.map((conversation, index) => (
+            {conversations?.map((conversation, index) => (
               <Box
                 key={index}
                 sx={{

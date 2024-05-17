@@ -1,4 +1,4 @@
-import { Conversation, GetAllConversationsResponse, UserProfileResponse } from '../services/requests';
+import { Conversation, ConversationBot, GetAllConversationsResponse, UserProfileResponse } from '../services/requests';
 
 export type AppProviderContextType = {
   isUserAuthorized: boolean;
@@ -7,14 +7,14 @@ export type AppProviderContextType = {
   signInError: boolean;
   setSignInError: (s: boolean) => void;
   handleSendMessage: (message: string) => void;
-  chatMessages: Message[];
-  setChatMessages: (messages: Message[]) => void;
-  userConversations: GetAllConversationsResponse | null;
+  conversations: ConversationsState;
   selectedAppView: string;
   setSelectedAppView: (type: string) => void;
-  selectedConversation: Conversation | null;
-  setSelectedConversation: (value: Conversation | null) => void;
+  selectedConversationId: string | null;
+  setSelectedConversationId: (value: string | null) => void;
   userProfile: UserProfileResponse | null;
+  selectedBotId: string | null;
+  setSelectedBotId: (type: string | null) => void;
 };
 
 export type Message = {
@@ -22,3 +22,9 @@ export type Message = {
   text: string;
   timestamp: string;
 };
+
+export type ConversationsState = Array<{
+  id: string;
+  bot: ConversationBot;
+  messages: Message[];
+}>;

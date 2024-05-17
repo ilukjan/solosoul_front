@@ -5,6 +5,7 @@ import Chat from './components/Chat/Chat';
 import Chats from './components/Chats/Chats';
 import Settings from './components/Settings/Settings';
 import { APP_VIEW } from '../../utils/constants';
+import BotPage from './components/BotPage/BotPage';
 
 function Main() {
   const { selectedAppView } = useAppState();
@@ -23,7 +24,12 @@ function Main() {
     }
   }, [selectedAppView]);
 
-  return <>{getAppView}</>;
+  return (
+    <>
+      {getAppView}
+      <BotPage />
+    </>
+  );
 }
 
 export default Main;

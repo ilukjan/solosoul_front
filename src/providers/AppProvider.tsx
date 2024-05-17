@@ -1,8 +1,6 @@
 import { ReactNode, createContext, FC, useState, useEffect } from 'react';
-import { AppProviderContextType, Message } from './AppProvider.types';
+import { AppProviderContextType, ConversationsState, Message } from './AppProvider.types';
 import {
-  Conversation,
-  GetAllConversationsResponse,
   SocketResponseMessage,
   UserProfileResponse,
   getAllConversations,
@@ -13,6 +11,7 @@ import {
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { APP_STORAGE_KEYS } from '../services/constants';
 import { APP_VIEW } from '../utils/constants';
+import { getMessagesFromLocalStorage, saveMessageToLocalStorage } from '../utils/localStorage';
 
 export const AppContext = createContext<AppProviderContextType | null>(null);
 
@@ -20,12 +19,13 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [userAccessToken, setUserAccessToken] = useState<string | null>(null);
   const [isSignInLoading, setSignInLoading] = useState(false);
   const [userId, setUserId] = useState<string | null>(null);
-  const [userConversations, setUserConversations] = useState<GetAllConversationsResponse | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   const [signInError, setSignInError] = useState(false);
-  const [chatMessages, setChatMessages] = useState<Message[]>([]);
-  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
+  const [conversations, setConversations] = useState<ConversationsState>([]);
+  const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [selectedAppView, setSelectedAppView] = useState(APP_VIEW.MAIN);
+  const [selectedBotId, setSelectedBotId] = useState<string | null>(null);
+  // const [advertisement, setAdvertisement] = useState<ConversationsState>([]);
 
   useEffect(() => {
     const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
@@ -48,7 +48,15 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     if (userId && userAccessToken) {
       getAllConversations(userId, userAccessToken).then((response) => {
         console.log('getAllConversations', response);
-        setUserConversations(response);
+
+        const conversationsWithMessages = response.map((conv) => {
+          const saved_messages = getMessagesFromLocalStorage(conv.id);
+          return {
+            ...conv,
+            messages: saved_messages,
+          };
+        });
+        setConversations(conversationsWithMessages);
       });
 
       getUserProfile(userId, userAccessToken).then((response) => {
@@ -105,36 +113,68 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
             const answerMessage: SocketResponseMessage = JSON.parse(ReceiveMessageResponse);
 
-            setChatMessages((prev) => [
-              ...prev,
-              {
-                fromYou: false,
-                text: answerMessage.Message,
-                timestamp: `${new Date(answerMessage.Timestamp).getHours()}:${new Date(
-                  answerMessage.Timestamp
-                ).getMinutes()}`,
-              },
-            ]);
+            setConversations((prev) => {
+              const updatedConversations = prev.map((conv) => {
+                if (conv.id === answerMessage.ConversationId) {
+                  const newMessage: Message = {
+                    fromYou: false,
+                    text: answerMessage.Message,
+                    timestamp: `${new Date(answerMessage.Timestamp).getHours()}:${new Date(
+                      answerMessage.Timestamp
+                    ).getMinutes()}`,
+                  };
+
+                  saveMessageToLocalStorage(newMessage, answerMessage.ConversationId);
+
+                  return {
+                    ...conv,
+                    messages: [...conv.messages, newMessage],
+                  };
+                } else {
+                  return conv;
+                }
+              });
+              return updatedConversations;
+            });
+          });
+
+          connection.on('SystemMessage', (ReceiveMessageResponse) => {
+            console.log('SystemMessage', JSON.parse(ReceiveMessageResponse));
+
+            // const answerMessage: SocketResponseMessage = JSON.parse(ReceiveMessageResponse);
           });
         } catch (error) {
-          console.log('Connection failed: ' + error);
+          console.log('Receive Connection failed: ' + error);
         }
       }
     })();
   }, [connection]);
 
   const handleSendMessage = (message: string) => {
-    setChatMessages((prev) => [
-      ...prev,
-      {
-        fromYou: true,
-        text: message,
-        timestamp: `${new Date().getHours()}:${new Date().getMinutes()}`,
-      },
-    ]);
+    if (userAccessToken && selectedConversationId) {
+      sendMessage(selectedConversationId, message, userAccessToken);
+      setConversations((prev) => {
+        const updatedConversations = prev.map((conv) => {
+          if (conv.id === selectedConversationId) {
+            const newMessage = {
+              fromYou: true,
+              text: message,
+              timestamp: `${new Date().getHours()}:${new Date().getMinutes()}`,
+            };
 
-    if (userAccessToken && selectedConversation) {
-      sendMessage(selectedConversation.id, message, userAccessToken);
+            saveMessageToLocalStorage(newMessage, selectedConversationId);
+
+            return {
+              ...conv,
+              messages: [...conv.messages, newMessage],
+            };
+          } else {
+            return conv;
+          }
+        });
+
+        return updatedConversations;
+      });
     }
   };
 
@@ -145,14 +185,13 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     signInError,
     setSignInError,
     handleSendMessage,
-    chatMessages,
-    userConversations,
     selectedAppView,
     setSelectedAppView,
-    setSelectedConversation,
-    setChatMessages,
-    selectedConversation,
+    setSelectedConversationId,
+    selectedConversationId,
     userProfile,
+    conversations,
+    selectedBotId, setSelectedBotId
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
