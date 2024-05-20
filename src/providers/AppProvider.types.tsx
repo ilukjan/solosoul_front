@@ -17,6 +17,9 @@ export type AppProviderContextType = {
   setSelectedBotId: (type: string | null) => void;
   advertisement: string | null;
   setAdvertisement: (type: string | null) => void;
+  tips: string[];
+  advertisementVisibility: boolean;
+  setAdvertisementVisibility: (s: boolean) => void;
 };
 
 export type Message = {

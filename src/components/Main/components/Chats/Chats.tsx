@@ -8,6 +8,7 @@ import { APP_COLORS, APP_VIEW } from '../../../../utils/constants';
 import ReadSvg from '../../../../assets/svg/readed.svg';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import Advertisement from './Advertisement';
+import StoriesWrapper from './Stories';
 
 function Chats() {
   const { setSelectedConversationId, setSelectedAppView, conversations } = useAppState();
@@ -45,25 +46,25 @@ function Chats() {
           >
             <Box
               sx={{
-                cursor: 'pointer',
                 display: 'flex',
-                position: 'fixed',
-                justifyContent: 'center',
+                alignItems: 'center',
+                flexDirection: 'column',
                 top: 0,
                 width: '100%',
                 maxWidth: '430px',
                 background: APP_COLORS.black,
-                padding: '20px 0',
               }}
             >
               <Typography
                 sx={{
                   fontFamily: 'sfpro600',
                   color: '#fff',
+                  padding: '20px 0',
                 }}
               >
                 Chats
               </Typography>
+              <StoriesWrapper></StoriesWrapper>
             </Box>
           </Box>
           <Box
@@ -74,7 +75,6 @@ function Chats() {
               flexDirection: 'column',
               background: APP_COLORS.darkBlack,
               overflow: 'auto',
-              marginTop: '64px',
             }}
           >
             <Advertisement />
@@ -172,10 +172,11 @@ function Chats() {
               bottom: '110px',
               right: '25px',
               borderRadius: '50%',
-              background: APP_COLORS.blue,
+              background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
               display: 'flex',
               justifyContent: 'center',
               alignItems: 'center',
+              cursor: 'pointer',
               '& svg': {
                 fill: APP_COLORS.textMain,
                 width: '40px',

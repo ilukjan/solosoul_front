@@ -1,12 +1,12 @@
 import { ReactNode, createContext, FC, useState, useEffect } from 'react';
-import { AppProviderContextType, ConversationsState, Message, SocketReceiveMessageType, SocketSystemMessageType } from './AppProvider.types';
 import {
-  UserProfileResponse,
-  getAllConversations,
-  getUserProfile,
-  sendMessage,
-  signIn,
-} from '../services/requests';
+  AppProviderContextType,
+  ConversationsState,
+  Message,
+  SocketReceiveMessageType,
+  SocketSystemMessageType,
+} from './AppProvider.types';
+import { UserProfileResponse, getAllConversations, getUserProfile, sendMessage, signIn } from '../services/requests';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { APP_STORAGE_KEYS } from '../services/constants';
 import { APP_VIEW } from '../utils/constants';
@@ -25,6 +25,8 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [selectedAppView, setSelectedAppView] = useState(APP_VIEW.MAIN);
   const [selectedBotId, setSelectedBotId] = useState<string | null>(null);
   const [advertisement, setAdvertisement] = useState<string | null>(null);
+  const [advertisementVisibility, setAdvertisementVisibility] = useState(false);
+  const [tips, setTips] = useState<string[]>([]);
 
   useEffect(() => {
     const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
@@ -64,7 +66,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
       });
     }
   }, [userId, userAccessToken]);
-
+console.log('add',advertisementVisibility);
   const handleSignIn = (username: string, password: string) => {
     setSignInLoading(true);
     signIn({ username, password })
@@ -141,10 +143,11 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
             console.log('SystemMessage', JSON.parse(ReceiveMessageResponse));
 
             const answerMessage: SocketSystemMessageType = JSON.parse(ReceiveMessageResponse);
-            if(answerMessage.UserId){
-                console.log('received tip');
-            }else{
-              setAdvertisement(answerMessage.Message)
+            if (answerMessage.UserId) {
+              setTips((prev) => [...prev, answerMessage.Message]);
+            } else {
+              setAdvertisement(answerMessage.Message);
+              setAdvertisementVisibility(true);
             }
           });
         } catch (error) {
@@ -199,6 +202,9 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setSelectedBotId,
     advertisement,
     setAdvertisement,
+    tips,
+    advertisementVisibility,
+    setAdvertisementVisibility,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
