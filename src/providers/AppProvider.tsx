@@ -6,7 +6,16 @@ import {
   SocketReceiveMessageType,
   SocketSystemMessageType,
 } from './AppProvider.types';
-import { UserProfileResponse, getAllConversations, getUserProfile, sendMessage, signIn } from '../services/requests';
+import {
+  GetBotToAddResponse,
+  UserProfileResponse,
+  addConversation,
+  getAllConversations,
+  getBotToAdd,
+  getUserProfile,
+  sendMessage,
+  signIn,
+} from '../services/requests';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { APP_STORAGE_KEYS } from '../services/constants';
 import { APP_VIEW } from '../utils/constants';
@@ -17,6 +26,9 @@ export const AppContext = createContext<AppProviderContextType | null>(null);
 export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [userAccessToken, setUserAccessToken] = useState<string | null>(null);
   const [isSignInLoading, setSignInLoading] = useState(false);
+  const [isAddBotLoading, setAddBotLoading] = useState(false);
+  const [isAddBotOpen, setAddBotOpen] = useState(false);
+  const [addBotData, setAddBotData] = useState<GetBotToAddResponse | null>(null);
   const [userId, setUserId] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   const [signInError, setSignInError] = useState(false);
@@ -38,7 +50,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
     const access_token = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
     const user_id = window.localStorage.getItem(APP_STORAGE_KEYS.USER_ID);
-    console.log('access_token', access_token);
+
     if (token_expired_date) {
       if (new Date(token_expired_date) > new Date()) {
         setUserAccessToken(access_token);
@@ -50,8 +62,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   }, []);
 
-  // GET DATA
-  useEffect(() => {
+  const fetchUserConversations = () => {
     if (userId && userAccessToken) {
       getAllConversations(userId, userAccessToken).then((response) => {
         console.log('getAllConversations', response);
@@ -65,19 +76,30 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
         });
         setConversations(conversationsWithMessages);
       });
+    }
+  };
+
+  // GET DATA
+  useEffect(() => {
+    if (userId && userAccessToken) {
+      fetchUserConversations();
 
       getUserProfile(userId, userAccessToken).then((response) => {
         console.log('getUserProfile', response);
         setUserProfile(response);
       });
+
+      getBotToAdd(userId, userAccessToken).then((response) => {
+        console.log('getBotToAdd', response);
+        setAddBotData(response);
+      });
     }
   }, [userId, userAccessToken]);
-  console.log('add', advertisementVisibility);
+
   const handleSignIn = (username: string, password: string) => {
     setSignInLoading(true);
     signIn({ username, password })
       .then((response) => {
-        console.log('signIn response', response);
         setUserAccessToken(response.access_token);
         setUserId(response.user_id);
         window.localStorage.setItem(APP_STORAGE_KEYS.ACCESS_TOKEN, response.access_token);
@@ -113,7 +135,6 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
       if (connection) {
         try {
           await connection.start();
-          console.log('Connected');
 
           connection.on('ReceiveMessage', (ReceiveMessageResponse) => {
             console.log('ReceiveMessageResponse', typeof ReceiveMessageResponse, JSON.parse(ReceiveMessageResponse));
@@ -163,6 +184,27 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     })();
   }, [connection]);
 
+  const handleFetchNewBot = (type: 'decline' | 'accept') => {
+    switch (type) {
+      case 'accept': {
+        addConversation(userId || '', userAccessToken || '', addBotData?.id || '').then((response) => {
+          setAddBotOpen(false);
+          fetchUserConversations();
+        });
+        break;
+      }
+      case 'decline': {
+        setAddBotLoading(true);
+
+        getBotToAdd(userId || '', userAccessToken || '').then((response) => {
+          setAddBotData(response);
+          setAddBotLoading(false);
+        });
+        break;
+      }
+    }
+  };
+
   const handleSendMessage = (message: string) => {
     if (userAccessToken && selectedConversationId) {
       sendMessage(selectedConversationId, message, userAccessToken);
@@ -211,6 +253,12 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     tips,
     advertisementVisibility,
     setAdvertisementVisibility,
+    isAddBotOpen,
+    setAddBotOpen,
+    isAddBotLoading,
+    setAddBotLoading,
+    handleFetchNewBot,
+    addBotData,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

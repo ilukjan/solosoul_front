@@ -40,7 +40,6 @@ function Settings() {
   const handleClickBack = () => {
     setSelectedAppView(APP_VIEW.MAIN);
   };
-  console.log('user', userProfile);
 
   return (
     <Box

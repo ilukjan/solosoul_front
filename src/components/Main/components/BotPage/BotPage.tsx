@@ -16,8 +16,6 @@ function BotPage() {
     return conversations.find((conv) => conv.bot.id === selectedBotId)?.bot;
   }, [selectedBotId, conversations]);
 
-  console.log('botProfile', botProfile);
-
   if (!selectedBotId) return null;
 
   return (

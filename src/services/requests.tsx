@@ -101,7 +101,6 @@ export async function getAllConversations(userId: string, token: string): Promis
     });
 }
 
-
 export type UserProfileResponse = {
   id: string;
   username: string;
@@ -145,6 +144,40 @@ export async function getUserProfile(id: string, token: string): Promise<UserPro
     .get(process.env.REACT_APP_API_URL + 'api/user/' + id, {
       headers: { Authorization: `Bearer ${token}` },
     })
+    .then(function (response) {
+      return response.data;
+    });
+}
+
+export type GetBotToAddResponse = {
+  id: string;
+  bot: ConversationBot;
+  messages: [];
+};
+
+export async function getBotToAdd(userId: string, token: string): Promise<GetBotToAddResponse> {
+  return axios
+    .get(process.env.REACT_APP_API_URL + `api/conversation/pool/${userId}/search`, {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+    .then(function (response) {
+      return response.data;
+    });
+}
+
+export async function addConversation(
+  userId: string,
+  token: string,
+  conversationId: string
+): Promise<GetBotToAddResponse> {
+  return axios
+    .post(
+      process.env.REACT_APP_API_URL + `api/conversation/pool/${userId}/add/${conversationId}`,
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
     .then(function (response) {
       return response.data;
     });

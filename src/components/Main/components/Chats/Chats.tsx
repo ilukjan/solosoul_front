@@ -9,10 +9,10 @@ import ReadSvg from '../../../../assets/svg/readed.svg';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import Advertisement from './Advertisement';
 import StoriesWrapper from './Stories';
+import AddBotPage from '../BotPage/AddBotPage';
 
 function Chats() {
-  const { setSelectedConversationId, setSelectedAppView, conversations } = useAppState();
-  const [open, setOpen] = useState(false);
+  const { setSelectedConversationId, setSelectedAppView, conversations, setAddBotOpen } = useAppState();
   const handleConversationClick = (conversation: Conversation) => {
     setSelectedConversationId(conversation.id);
     setSelectedAppView(APP_VIEW.CHAT);
@@ -184,7 +184,7 @@ function Chats() {
               },
             }}
             onClick={() => {
-              setOpen(true);
+              setAddBotOpen(true);
             }}
           >
             <AddRoundedIcon />
@@ -192,42 +192,8 @@ function Chats() {
           <Footer />
         </Box>
       </Box>
-      <Modal open={open}>
-        <Box
-          sx={{
-            padding: '20px',
-            width: '250px',
-            margin: 'auto',
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
-            background: APP_COLORS.black,
-            borderRadius: '12px',
-            display: 'flex',
-            flexDirection: 'column',
-          }}
-        >
-          <Typography
-            sx={{
-              fontFamily: 'sfpro600',
-              color: '#fff',
-            }}
-          >
-            Coming soon...
-          </Typography>
-          <Button
-            sx={{
-              marginLeft: 'auto',
-            }}
-            onClick={() => {
-              setOpen(false);
-            }}
-          >
-            Close
-          </Button>
-        </Box>
-      </Modal>
+
+      <AddBotPage />
     </>
   );
 }
