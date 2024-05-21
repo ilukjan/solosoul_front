@@ -29,6 +29,12 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [tips, setTips] = useState<string[]>([]);
 
   useEffect(() => {
+    setTimeout(() => {
+      setTips((prev) => [...prev, 'Welcome to Solo Soul!', 'Here you will receive tips and hints. Do not miss!']);
+    }, 5000);
+  }, []);
+
+  useEffect(() => {
     const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
     const access_token = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
     const user_id = window.localStorage.getItem(APP_STORAGE_KEYS.USER_ID);
@@ -66,7 +72,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
       });
     }
   }, [userId, userAccessToken]);
-console.log('add',advertisementVisibility);
+  console.log('add', advertisementVisibility);
   const handleSignIn = (username: string, password: string) => {
     setSignInLoading(true);
     signIn({ username, password })

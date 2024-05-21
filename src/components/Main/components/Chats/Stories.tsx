@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box } from '@mui/material';
+import React, { useMemo, useState } from 'react';
+import { Box, Typography } from '@mui/material';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import Stories from 'react-insta-stories';
 import { useAppState } from '../../../../providers/AppProvider.hooks';
@@ -7,20 +7,40 @@ import { APP_COLORS } from '../../../../utils/constants';
 
 function StoriesWrapper() {
   const { tips } = useAppState();
+  const [open, setOpen] = useState(false);
 
-  console.log('tips', tips);
-  const stories = [
-    {
-      url: 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png',
-      // seeMore: SeeMoreComponent, // when expanded
-      // seeMoreCollapsed: customCollapsedComponent, // when collapsed
-    },
-    {
-      url: 'https://www.google.com/images/branding/googlelogo/2x/googlelogo_color_92x30dp.png',
-      // seeMore: SeeMoreComponent, // when expanded
-      // seeMoreCollapsed: customCollapsedComponent, // when collapsed
-    },
-  ];
+  const stories = useMemo(() => {
+    return tips.map((tip) => ({
+      content: (props: any) => {
+        // console.log('props', props);
+        return (
+          <Box
+            sx={{
+              width: '100%',
+              height: '100%',
+              background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <Typography
+              sx={{
+                fontFamily: 'sfpro500',
+                color: APP_COLORS.textMain,
+                margin: '20px',
+                fontSize: '26px',
+                textAlign: 'center',
+              }}
+            >
+              {tip}
+            </Typography>
+          </Box>
+        );
+      },
+    }));
+  }, [tips]);
+
   return (
     <Box
       sx={{
@@ -29,6 +49,9 @@ function StoriesWrapper() {
     >
       {tips.length > 0 && (
         <Box
+          onClick={() => {
+            setOpen(true);
+          }}
           sx={{
             marginTop: '-10px',
             paddingBottom: '10px',
@@ -88,16 +111,27 @@ function StoriesWrapper() {
           </Box>
         </Box>
       )}
-      {/* <Box sx={{
-        border: '1px solid red',
-        position: 'absolute',
-        top: 0,
-        bottom: 0,
-        zIndex: 9999,
-        background: 'white'
-      }}>
-      <Stories stories={stories} defaultInterval={1500} width={432} height={768} />
-      </Box> */}
+      {open && (
+        <Box
+          sx={{
+            width: '100%',
+            position: 'absolute',
+            top: 0,
+            bottom: 0,
+            zIndex: 9,
+          }}
+        >
+          <Stories
+            onAllStoriesEnd={() => {
+              setOpen(false);
+            }}
+            stories={stories}
+            defaultInterval={2500}
+            width={'100%'}
+            height={'100%'}
+          />
+        </Box>
+      )}
     </Box>
   );
 }
