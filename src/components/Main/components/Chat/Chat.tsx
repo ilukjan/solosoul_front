@@ -8,8 +8,6 @@ import background from '../../../../assets/images/chat_bg.webp';
 import ReadSvg from '../../../../assets/svg/readed_gray.svg';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import AttachIcon from '../../../../assets/svg/attack_icon.svg';
-import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
-import {Camera} from "react-camera-pro";
 
 function Chat() {
   const [message, setMessage] = useState('');
@@ -296,7 +294,7 @@ function Chat() {
                 },
                 '& label': {
                   cursor: 'pointer',
-                  marginLeft: '10px',
+                  margin: '10px',
                 },
               }}
             >
@@ -305,14 +303,6 @@ function Chat() {
                 <input onChange={handleFileAdd} type={'file'} accept="image/png, image/jpeg"></input>
               </label>
             </Box>
-            <PhotoCameraIcon
-            onClick={()=>{}}
-              style={{
-                color: '#8E8E93',
-                marginLeft: '5px',
-                marginRight: '10px',
-              }}
-            />
             <input
               placeholder="Message"
               type="text"
@@ -346,17 +336,6 @@ function Chat() {
             </Box>
           </Box>
         </Box>
-        {/* <Camera ref={camera}
-                errorMessages={{}}
-        /> */}
-        {/* <Camera
-        ref={cameraRef}
-        facingMode="environment"
-        errorMessages={{}}
-        videoReadyCallback={() => {
-          setWebcamAllowed(true);
-        }}
-      /> */}
       </Box>
     </Box>
   );

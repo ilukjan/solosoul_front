@@ -9,9 +9,9 @@ import ProvideRoute from './components/routes/ProvideRoute';
 import Main from './components/Main/Main';
 
 export enum AppRoutes {
-  HOME = '*',
-  SIGN_IN = '/sign-in',
-  MAIN = '/main',
+  HOME = '/solosoul_front/*',
+  SIGN_IN = '/solosoul_front/sign-in',
+  MAIN = '/solosoul_front/main',
 }
 const router = createBrowserRouter([
   {
