@@ -45,8 +45,12 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     setTimeout(() => {
-      setTips((prev) => [...prev, 'Welcome to Solo Soul!', 'Here you will receive tips and hints. Do not miss!']);
-    }, 5000);
+      setTips((prev) => [
+        ...prev,
+        'Hi! This is your virtual partner trainer! Start chat with him/her and good luck 😉',
+        'Don’t be afraid, just write something like “hi there” and enjoy communication ☺️ 🫡',
+      ]);
+    }, 100);
   }, []);
 
   useEffect(() => {
