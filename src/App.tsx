@@ -10,8 +10,8 @@ import Main from './components/Main/Main';
 
 export enum AppRoutes {
   HOME = '*',
-  SIGN_IN = '/solosoul_front/sign-in',
-  MAIN = '/solosoul_front/main',
+  SIGN_IN = '/sign-in',
+  MAIN = '/main',
 }
 const router = createBrowserRouter([
   {
