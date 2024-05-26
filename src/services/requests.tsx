@@ -180,3 +180,22 @@ export async function updateSettings(
       return response.data;
     });
 }
+
+
+
+export async function sendMediaMessage(id: string, token: string): Promise<any> {
+  return axios
+    .post(
+      process.env.REACT_APP_API_URL + `api/conversation/${id}/sendmediamessage`,
+      {
+        image: 'string',
+        message: 'string',
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+    .then(function (response) {
+      return response.data;
+    });
+}

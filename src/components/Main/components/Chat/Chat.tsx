@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import ArrowBack from '../../../../assets/svg/arrow_back.svg';
 
@@ -8,6 +8,8 @@ import background from '../../../../assets/images/chat_bg.webp';
 import ReadSvg from '../../../../assets/svg/readed_gray.svg';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import AttachIcon from '../../../../assets/svg/attack_icon.svg';
+import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
+import {Camera} from "react-camera-pro";
 
 function Chat() {
   const [message, setMessage] = useState('');
@@ -18,7 +20,12 @@ function Chat() {
     selectedConversationId,
     conversations,
     setSelectedBotId,
+    chatPhoto,
+    handleAddFile,
   } = useAppState();
+  const [isWebcamAllowed, setWebcamAllowed] = useState(false);
+  const cameraRef = useRef(null);
+  const camera = useRef(null);
 
   const handleSendMessageClick = () => {
     if (message !== '') {
@@ -46,6 +53,12 @@ function Chat() {
 
   const handleBotClick = (botId: string | undefined) => {
     setSelectedBotId(botId ?? null);
+  };
+
+  const handleFileAdd = (event: ChangeEvent<HTMLInputElement>) => {
+    if (event.target.files && event.target.files[0]) {
+      handleAddFile(URL.createObjectURL(event.target.files[0]));
+    }
   };
 
   return (
@@ -184,23 +197,38 @@ function Chat() {
                 background: message.fromYou
                   ? 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)'
                   : APP_COLORS.botMessage,
-                padding: '5px 15px',
+                padding: '10px 15px 5px',
                 borderRadius: '16px',
                 maxWidth: '70%',
                 marginLeft: message.fromYou ? 'auto' : '10px',
                 marginRight: message.fromYou ? '10px' : 'auto',
               }}
             >
-              <Typography
-                sx={{
-                  fontFamily: 'sfpro400',
-                  color: APP_COLORS.textMain,
-                  fontSize: '17px',
-                  textAlign: message.fromYou ? 'right' : 'left',
-                }}
-              >
-                {message.text}
-              </Typography>
+              {message.text === 'user_image_message_key' ? (
+                <Box
+                  sx={{
+                    maxWidth: '100%',
+                    marginTop: '5px',
+                    '& img': {
+                      maxWidth: '100%',
+                      borderRadius: '5px',
+                    },
+                  }}
+                >
+                  <img src={chatPhoto || ''} alt="user photo"></img>
+                </Box>
+              ) : (
+                <Typography
+                  sx={{
+                    fontFamily: 'sfpro400',
+                    color: APP_COLORS.textMain,
+                    fontSize: '17px',
+                    textAlign: message.fromYou ? 'right' : 'left',
+                  }}
+                >
+                  {message.text}
+                </Typography>
+              )}
               <Box
                 sx={{
                   // border: '1px solid red',
@@ -261,7 +289,30 @@ function Chat() {
               },
             }}
           >
-            <img style={{ margin: '0 10px' }} src={AttachIcon} alt="attach"></img>
+            <Box
+              sx={{
+                '& input': {
+                  display: 'none',
+                },
+                '& label': {
+                  cursor: 'pointer',
+                  marginLeft: '10px',
+                },
+              }}
+            >
+              <label>
+                <img src={AttachIcon} alt="attach"></img>
+                <input onChange={handleFileAdd} type={'file'} accept="image/png, image/jpeg"></input>
+              </label>
+            </Box>
+            <PhotoCameraIcon
+            onClick={()=>{}}
+              style={{
+                color: '#8E8E93',
+                marginLeft: '5px',
+                marginRight: '10px',
+              }}
+            />
             <input
               placeholder="Message"
               type="text"
@@ -295,6 +346,17 @@ function Chat() {
             </Box>
           </Box>
         </Box>
+        {/* <Camera ref={camera}
+                errorMessages={{}}
+        /> */}
+        {/* <Camera
+        ref={cameraRef}
+        facingMode="environment"
+        errorMessages={{}}
+        videoReadyCallback={() => {
+          setWebcamAllowed(true);
+        }}
+      /> */}
       </Box>
     </Box>
   );

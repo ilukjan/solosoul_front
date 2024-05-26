@@ -13,6 +13,7 @@ import {
   getAllConversations,
   getBotToAdd,
   getUserProfile,
+  sendMediaMessage,
   sendMessage,
   signIn,
   updateSettings,
@@ -40,6 +41,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [advertisement, setAdvertisement] = useState<string | null>(null);
   const [advertisementVisibility, setAdvertisementVisibility] = useState(false);
   const [tips, setTips] = useState<string[]>([]);
+  const [chatPhoto, setChatPhoto] = useState<string | null>(null);
 
   useEffect(() => {
     setTimeout(() => {
@@ -68,7 +70,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
       getAllConversations(userId, userAccessToken).then((response) => {
         console.log('getAllConversations', response);
 
-        const conversationsWithMessages = response.map((conv) => {
+        const conversationsWithMessages: ConversationsState = response.map((conv) => {
           const saved_messages = getMessagesFromLocalStorage(conv.id);
           return {
             ...conv,
@@ -158,7 +160,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
             const answerMessage: SocketReceiveMessageType = JSON.parse(ReceiveMessageResponse);
 
             setConversations((prev) => {
-              const updatedConversations = prev.map((conv) => {
+              const updatedConversations: ConversationsState = prev.map((conv) => {
                 if (conv.id === answerMessage.ConversationId) {
                   const newMessage: Message = {
                     fromYou: false,
@@ -252,6 +254,31 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
+  const handleAddFile = (path: string) => {
+    setChatPhoto(path);
+    sendMediaMessage(selectedConversationId || '', userAccessToken || '');
+    setConversations((prev) => {
+      const updatedConversations = prev.map((conv) => {
+        if (conv.id === selectedConversationId) {
+          const newMessage = {
+            fromYou: true,
+            text: 'user_image_message_key',
+            timestamp: `${new Date().getHours()}:${new Date().getMinutes()}`,
+          };
+
+          return {
+            ...conv,
+            messages: [...conv.messages, newMessage],
+          };
+        } else {
+          return conv;
+        }
+      });
+
+      return updatedConversations;
+    });
+  };
+
   const value: AppProviderContextType = {
     isUserAuthorized: userAccessToken !== null,
     handleSignIn,
@@ -280,6 +307,8 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     addBotData,
     fetchUserData,
     handleUpdateSettings,
+    chatPhoto,
+    handleAddFile,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
