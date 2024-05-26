@@ -32,6 +32,8 @@ export type AppProviderContextType = {
   setAddBotLoading: (s: boolean) => void;
   handleFetchNewBot: (s: 'decline' | 'accept') => void;
   addBotData: GetBotToAddResponse | null;
+  fetchUserData: () => void;
+  handleUpdateSettings: (search_gender: string, search_age_from: number, search_age_to: number) => void;
 };
 
 export type Message = {

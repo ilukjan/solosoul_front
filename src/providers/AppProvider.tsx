@@ -15,6 +15,7 @@ import {
   getUserProfile,
   sendMessage,
   signIn,
+  updateSettings,
 } from '../services/requests';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { APP_STORAGE_KEYS } from '../services/constants';
@@ -79,15 +80,21 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
+  const fetchUserData = () => {
+    if (userId && userAccessToken) {
+      getUserProfile(userId, userAccessToken).then((response) => {
+        console.log('getUserProfile', response);
+        setUserProfile(response);
+      });
+    }
+  };
+
   // GET DATA
   useEffect(() => {
     if (userId && userAccessToken) {
       fetchUserConversations();
 
-      getUserProfile(userId, userAccessToken).then((response) => {
-        console.log('getUserProfile', response);
-        setUserProfile(response);
-      });
+      fetchUserData();
 
       getBotToAdd(userId, userAccessToken).then((response) => {
         console.log('getBotToAdd', response);
@@ -233,6 +240,15 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
+  const handleUpdateSettings = (search_gender: string, search_age_from: number, search_age_to: number) => {
+    if (userAccessToken && userId) {
+      updateSettings(userId, userAccessToken, search_gender, search_age_from, search_age_to).then((response) => {
+        console.log('updateSettings RESP', response);
+        // setUserProfile(response);
+      });
+    }
+  };
+
   const value: AppProviderContextType = {
     isUserAuthorized: userAccessToken !== null,
     handleSignIn,
@@ -259,6 +275,8 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     setAddBotLoading,
     handleFetchNewBot,
     addBotData,
+    fetchUserData,
+    handleUpdateSettings,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
