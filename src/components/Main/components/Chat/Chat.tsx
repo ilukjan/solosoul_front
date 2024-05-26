@@ -90,7 +90,6 @@ function Chat() {
             sx={{
               cursor: 'pointer',
               display: 'flex',
-              position: 'fixed',
               justifyContent: 'space-between',
               alignItems: 'center',
               top: 0,
@@ -185,6 +184,7 @@ function Chat() {
             flexDirection: 'column',
             gap: '5px',
             paddingBottom: '10px',
+            paddingTop: '10px',
             overflow: 'auto',
           }}
         >

@@ -22,7 +22,7 @@ function Advertisement() {
             position: 'relative',
             marginTop: advertisementVisibility ? '0px' : `-${boxRef.current?.clientHeight}px`,
             transition: `all 1s ease`,
-            overflow: 'hidden',
+            // overflow: 'hidden',
           }}
         >
           <Box
