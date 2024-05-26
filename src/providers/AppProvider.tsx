@@ -89,6 +89,18 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
+  const fetchBotToAdd = () => {
+    if (userId && userAccessToken) {
+      setAddBotLoading(true);
+
+      getBotToAdd(userId || '', userAccessToken || '').then((response) => {
+        console.log('getBotToAdd', response);
+        setAddBotData(response);
+        setAddBotLoading(false);
+      });
+    }
+  };
+
   // GET DATA
   useEffect(() => {
     if (userId && userAccessToken) {
@@ -96,10 +108,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
       fetchUserData();
 
-      getBotToAdd(userId, userAccessToken).then((response) => {
-        console.log('getBotToAdd', response);
-        setAddBotData(response);
-      });
+      fetchBotToAdd();
     }
   }, [userId, userAccessToken]);
 
@@ -201,12 +210,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
         break;
       }
       case 'decline': {
-        setAddBotLoading(true);
-
-        getBotToAdd(userId || '', userAccessToken || '').then((response) => {
-          setAddBotData(response);
-          setAddBotLoading(false);
-        });
+        fetchBotToAdd();
         break;
       }
     }
@@ -243,8 +247,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const handleUpdateSettings = (search_gender: string, search_age_from: number, search_age_to: number) => {
     if (userAccessToken && userId) {
       updateSettings(userId, userAccessToken, search_gender, search_age_from, search_age_to).then((response) => {
-        console.log('updateSettings RESP', response);
-        // setUserProfile(response);
+        fetchBotToAdd();
       });
     }
   };
