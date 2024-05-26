@@ -9,7 +9,7 @@ import ProvideRoute from './components/routes/ProvideRoute';
 import Main from './components/Main/Main';
 
 export enum AppRoutes {
-  HOME = '/solosoul_front/*',
+  HOME = '*',
   SIGN_IN = '/solosoul_front/sign-in',
   MAIN = '/solosoul_front/main',
 }
