@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/solosoul_front/static/css/main.cef6bc2e.css",
-    "main.js": "/solosoul_front/static/js/main.9c79b709.js",
+    "main.js": "/solosoul_front/static/js/main.9bfea136.js",
     "static/media/SFUIDisplay-Semibold.ttf": "/solosoul_front/static/media/SFUIDisplay-Semibold.cb4925c92f2e65033ecd.ttf",
     "static/media/SFUIDisplay-Bold.ttf": "/solosoul_front/static/media/SFUIDisplay-Bold.1cd932c78a782a2a36b3.ttf",
     "static/media/SFUIDisplay-Medium.ttf": "/solosoul_front/static/media/SFUIDisplay-Medium.a49cbc2c4a4f1f9f24ed.ttf",
@@ -15,10 +15,10 @@
     "index.html": "/solosoul_front/index.html",
     "static/media/arrow_back.svg": "/solosoul_front/static/media/arrow_back.8028b9c777295a1bef6e31464b2cd6f6.svg",
     "main.cef6bc2e.css.map": "/solosoul_front/static/css/main.cef6bc2e.css.map",
-    "main.9c79b709.js.map": "/solosoul_front/static/js/main.9c79b709.js.map"
+    "main.9bfea136.js.map": "/solosoul_front/static/js/main.9bfea136.js.map"
   },
   "entrypoints": [
     "static/css/main.cef6bc2e.css",
-    "static/js/main.9c79b709.js"
+    "static/js/main.9bfea136.js"
   ]
 }
