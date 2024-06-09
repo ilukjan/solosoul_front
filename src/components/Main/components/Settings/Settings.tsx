@@ -4,7 +4,7 @@ import ArrowBack from '../../../../assets/svg/arrow_back.svg';
 
 import Footer from '../../../common/Footer/Footer';
 import { APP_COLORS, APP_VIEW } from '../../../../utils/constants';
-import { useAppState } from '../../../../providers/AppProvider.hooks';
+import { useAppState } from '../../../../providers/AppProvider/AppProvider.hooks';
 import { linearProgressClasses } from '@mui/material/LinearProgress';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Box, Button, Modal, Typography } from '@mui/material';
+import React from 'react';
+import { Box, Typography } from '@mui/material';
 
-import { useAppState } from '../../../../providers/AppProvider.hooks';
+import { useAppState } from '../../../../providers/AppProvider/AppProvider.hooks';
 import Footer from '../../../common/Footer/Footer';
 import { Conversation } from '../../../../services/requests';
 import { APP_COLORS, APP_VIEW } from '../../../../utils/constants';

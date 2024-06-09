@@ -1,8 +1,8 @@
-import React, { ChangeEvent, useEffect, useMemo, useRef, useState } from 'react';
+import React, { ChangeEvent, useEffect, useMemo, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import ArrowBack from '../../../../assets/svg/arrow_back.svg';
 
-import { useAppState } from '../../../../providers/AppProvider.hooks';
+import { useAppState } from '../../../../providers/AppProvider/AppProvider.hooks';
 import { APP_COLORS, APP_VIEW } from '../../../../utils/constants';
 import background from '../../../../assets/images/chat_bg.webp';
 import ReadSvg from '../../../../assets/svg/readed_gray.svg';
@@ -21,10 +21,6 @@ function Chat() {
     chatPhoto,
     handleAddFile,
   } = useAppState();
-  const [isWebcamAllowed, setWebcamAllowed] = useState(false);
-  const cameraRef = useRef(null);
-  const camera = useRef(null);
-
   const handleSendMessageClick = () => {
     if (message !== '') {
       handleSendMessage(message);
@@ -213,7 +209,7 @@ function Chat() {
                     },
                   }}
                 >
-                  <img src={chatPhoto || ''} alt="user photo"></img>
+                  <img src={chatPhoto || ''} alt="user"></img>
                 </Box>
               ) : (
                 <Typography

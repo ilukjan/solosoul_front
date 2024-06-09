@@ -2,7 +2,7 @@ import React, { useMemo, useState } from 'react';
 import { Box, Typography } from '@mui/material';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
 import Stories from 'react-insta-stories';
-import { useAppState } from '../../../../providers/AppProvider.hooks';
+import { useAppState } from '../../../../providers/AppProvider/AppProvider.hooks';
 import { APP_COLORS } from '../../../../utils/constants';
 
 function StoriesWrapper() {

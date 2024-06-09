@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import ArrowBack from '../../../../assets/svg/arrow_back.svg';
 import { APP_COLORS } from '../../../../utils/constants';
-import { useAppState } from '../../../../providers/AppProvider.hooks';
+import { useAppState } from '../../../../providers/AppProvider/AppProvider.hooks';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
 import PersonOffIcon from '@mui/icons-material/PersonOff';
 

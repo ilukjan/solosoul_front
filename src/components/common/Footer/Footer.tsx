@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 
 import ChatIcon from '../../../assets/svg/chats_icon.svg';
-import { useAppState } from '../../../providers/AppProvider.hooks';
+import { useAppState } from '../../../providers/AppProvider/AppProvider.hooks';
 import { APP_COLORS, APP_VIEW } from '../../../utils/constants';
 
 function Footer() {
