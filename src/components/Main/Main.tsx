@@ -8,9 +8,10 @@ import { APP_VIEW } from '../../utils/constants';
 import BotPage from './components/BotPage/BotPage';
 import { Box, CircularProgress } from '@mui/material';
 import { useSignIn } from '../../providers/SignInProvider/SignInProvider.hooks';
+import Onboarding from './components/Onboarding/Onboarding';
 
 function Main() {
-  const { selectedAppView } = useAppState();
+  const { selectedAppView, userProfile } = useAppState();
   const { isSignInLoading } = useSignIn();
 
   const getAppView = useMemo(() => {
@@ -40,6 +41,10 @@ function Main() {
         <CircularProgress size={80}></CircularProgress>
       </Box>
     );
+
+    if(userProfile?.account === null){
+      return <Onboarding></Onboarding>
+    }
 
   return (
     <>

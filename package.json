@@ -23,6 +23,7 @@
     "react-insta-stories": "^2.6.2",
     "react-router-dom": "^6.23.0",
     "react-scripts": "5.0.1",
+    "react-toastify": "^10.0.5",
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },

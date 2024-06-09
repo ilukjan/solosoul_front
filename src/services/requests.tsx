@@ -1,18 +1,15 @@
 import axios from 'axios';
+import { APP_API_URL } from './constants';
 
 export type SignInResponse = {
   user_id: string;
-  payment_subscription: {
-    id: string;
-    expire_at: string;
-  };
   access_token: string;
   token_valid_till: string;
 };
 
 export async function signIn({ username, password }: { username: string; password: string }): Promise<SignInResponse> {
   return axios
-    .post(process.env.REACT_APP_API_URL + 'api/user/signin', {
+    .post(APP_API_URL + 'api/user/signin', {
       username,
       password,
     })
@@ -24,7 +21,7 @@ export async function signIn({ username, password }: { username: string; passwor
 export async function sendMessage(id: string, message: string, token: string): Promise<any> {
   return axios
     .post(
-      process.env.REACT_APP_API_URL + `api/conversation/${id}/sendmessage`,
+      APP_API_URL + `api/conversation/${id}/sendmessage`,
       {
         message,
       },
@@ -59,7 +56,7 @@ export type ConversationBot = {
 
 export async function getAllConversations(userId: string, token: string): Promise<GetAllConversationsResponse> {
   return axios
-    .get(process.env.REACT_APP_API_URL + 'api/conversation/all/' + userId, {
+    .get(APP_API_URL + 'api/conversation/all/' + userId, {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then(function (response) {
@@ -69,53 +66,18 @@ export async function getAllConversations(userId: string, token: string): Promis
 
 export type UserProfileResponse = {
   id: string;
+  account: null | {
+    gender: string;
+    age: number;
+    img: string | null;
+  };
   username: string;
-  gender: string;
-  age: number;
-  profile: {
-    level: {
-      level: string;
-      progress: number;
-    };
-    pretty: {
-      progress: number;
-    };
-    drive: {
-      progress: number;
-    };
-    erudition: {
-      progress: number;
-    };
-    romantic: {
-      progress: number;
-    };
-    horny: {
-      progress: number;
-    };
-  };
-  search_settings: {
-    search_gender: string;
-    search_age_from: number;
-    search_age_to: number;
-    topics: [
-      {
-        topic_id: string;
-        topic_name: string;
-        topic_description: string;
-        topic_is_enabled: boolean;
-      }
-    ];
-  };
-  img: string;
-  subscription: {
-    id: string;
-    expire_at: string;
-  };
+  search_settings: null | {};
 };
 
 export async function getUserProfile(id: string, token: string): Promise<UserProfileResponse> {
   return axios
-    .get(process.env.REACT_APP_API_URL + 'api/user/' + id, {
+    .get(APP_API_URL + 'api/user/' + id, {
       headers: { Authorization: `Bearer ${token}` },
     })
     .then(function (response) {
@@ -131,9 +93,32 @@ export type GetBotToAddResponse = {
 
 export async function getBotToAdd(userId: string, token: string): Promise<GetBotToAddResponse> {
   return axios
-    .get(process.env.REACT_APP_API_URL + `api/conversation/pool/${userId}/search`, {
+    .get(APP_API_URL + `api/conversation/pool/${userId}/search`, {
       headers: { Authorization: `Bearer ${token}` },
     })
+    .then(function (response) {
+      return response.data;
+    });
+}
+
+export async function addUserAccountInfo(
+  userId: string,
+  token: string,
+  gender: string,
+  age: number
+): Promise<UserProfileResponse['account']> {
+  return axios
+    .post(
+      APP_API_URL + `api/user/account/${userId}/set`,
+      {
+        gender,
+        age,
+        img: ''
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
     .then(function (response) {
       return response.data;
     });
@@ -146,7 +131,7 @@ export async function addConversation(
 ): Promise<GetBotToAddResponse> {
   return axios
     .post(
-      process.env.REACT_APP_API_URL + `api/conversation/pool/${userId}/add/${conversationId}`,
+      APP_API_URL + `api/conversation/pool/${userId}/add/${conversationId}`,
       {},
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -166,7 +151,7 @@ export async function updateSettings(
 ): Promise<GetBotToAddResponse> {
   return axios
     .post(
-      process.env.REACT_APP_API_URL + `api/user/settings/${userId}/set`,
+      APP_API_URL + `api/user/settings/${userId}/set`,
       {
         search_gender,
         search_age_from,
@@ -181,12 +166,10 @@ export async function updateSettings(
     });
 }
 
-
-
 export async function sendMediaMessage(id: string, token: string): Promise<any> {
   return axios
     .post(
-      process.env.REACT_APP_API_URL + `api/conversation/${id}/sendmediamessage`,
+      APP_API_URL + `api/conversation/${id}/sendmediamessage`,
       {
         image: 'string',
         message: 'string',

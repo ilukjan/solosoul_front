@@ -3,6 +3,7 @@ import { SignInProviderContextType } from './SignInProvider.types';
 import { signIn } from '../../services/requests';
 import { APP_STORAGE_KEYS } from '../../services/constants';
 import { getCurrentBrowserFingerPrint } from '@rajesh896/broprint.js';
+import { toast } from 'react-toastify';
 
 export const SignInContext = createContext<SignInProviderContextType | null>(null);
 
@@ -20,19 +21,21 @@ export const SignInProvider: FC<{ children: ReactNode }> = ({ children }) => {
     if (access_token && token_expired_date && new Date(token_expired_date) > new Date()) {
       setUserAccessToken(access_token);
       setUserId(user_id);
-      setSignInLoading(false)
-    }else {
+      setSignInLoading(false);
+    } else {
       window.localStorage.removeItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
       window.localStorage.removeItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
 
       getCurrentBrowserFingerPrint().then((fingerprint) => {
-          handleSignIn(fingerprint, 'password');
-      })
+        console.log('handleSignIn(', fingerprint);
+        handleSignIn(fingerprint, 'password');
+      });
     }
   }, []);
 
   const handleSignIn = (username: string, password: string) => {
-    console.log(1111,'handleSignIn');
+    console.log('handleSignIn');
+        setSignInLoading(false);
 
     signIn({ username, password })
       .then((response) => {
@@ -42,13 +45,16 @@ export const SignInProvider: FC<{ children: ReactNode }> = ({ children }) => {
         window.localStorage.setItem(APP_STORAGE_KEYS.ACCESS_TOKEN, response.access_token);
         window.localStorage.setItem(APP_STORAGE_KEYS.USER_ID, response.user_id);
         window.localStorage.setItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL, response.token_valid_till);
+        setSignInLoading(false);
+        toast(`Successfully signed in`, { type: 'success', hideProgressBar: true });
       })
       .catch((err) => {
         console.error('sign in error: ', err);
+        toast(`Sign in error: ${err}`, { type: 'error', hideProgressBar: true });
         setSignInError(true);
       })
       .finally(() => {
-        setSignInLoading(false);
+        // setSignInLoading(false);
       });
   };
 

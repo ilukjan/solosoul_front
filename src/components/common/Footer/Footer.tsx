@@ -58,7 +58,7 @@ function Footer() {
             height: '25px',
             background: 'lightgrey',
             borderRadius: '50%',
-            backgroundImage: `url(${userProfile?.img})`,
+            // backgroundImage: `url(${userProfile?.img})`,
             backgroundSize: 'contain',
             backgroundPosition: 'center',
           }}

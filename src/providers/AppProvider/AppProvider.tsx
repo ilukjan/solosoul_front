@@ -68,6 +68,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const fetchUserData = () => {
     if (userId && userAccessToken) {
+
       getUserProfile(userId, userAccessToken).then((response) => {
         console.log('getUserProfile', response);
         setUserProfile(response);
@@ -90,11 +91,11 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   // GET DATA
   useEffect(() => {
     if (userId && userAccessToken) {
-      fetchUserConversations();
+      // fetchUserConversations();
 
       fetchUserData();
 
-      fetchBotToAdd();
+      // fetchBotToAdd();
     }
   }, [userId, userAccessToken]);
 
@@ -102,15 +103,15 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   useEffect(() => {
     if (userAccessToken) {
-      const newConnection = new HubConnectionBuilder()
-        .withUrl('https://solosoul.azurewebsites.net/botChatHub', {
-          // skipNegotiation: true,
-          // transport: HttpTransportType.WebSockets,
-        })
-        .withAutomaticReconnect()
-        .build();
+      // const newConnection = new HubConnectionBuilder()
+      //   .withUrl('https://solosoul.azurewebsites.net/botChatHub', {
+      //     // skipNegotiation: true,
+      //     // transport: HttpTransportType.WebSockets,
+      //   })
+      //   .withAutomaticReconnect()
+      //   .build();
 
-      setConnection(newConnection);
+      // setConnection(newConnection);
     }
   }, [userAccessToken]);
 
@@ -270,6 +271,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     handleUpdateSettings,
     chatPhoto,
     handleAddFile,
+    setUserProfile
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

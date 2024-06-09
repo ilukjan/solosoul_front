@@ -1,10 +1,4 @@
-import {
-  Conversation,
-  ConversationBot,
-  GetAllConversationsResponse,
-  GetBotToAddResponse,
-  UserProfileResponse,
-} from '../../services/requests';
+import { ConversationBot, GetBotToAddResponse, UserProfileResponse } from '../../services/requests';
 
 export type AppProviderContextType = {
   handleSendMessage: (message: string) => void;
@@ -14,6 +8,7 @@ export type AppProviderContextType = {
   selectedConversationId: string | null;
   setSelectedConversationId: (value: string | null) => void;
   userProfile: UserProfileResponse | null;
+  setUserProfile: React.Dispatch<React.SetStateAction<UserProfileResponse | null>>;
   selectedBotId: string | null;
   setSelectedBotId: (type: string | null) => void;
   advertisement: string | null;

@@ -56,15 +56,15 @@ const CustomProgress = ({
 
 function Settings() {
   const { setSelectedAppView, userProfile, fetchUserData, handleUpdateSettings } = useAppState();
-  const [searchFor, setSearchFor] = useState(userProfile?.search_settings.search_gender);
-  const [searchAgeFrom, setSearchAgeFrom] = useState(String(userProfile?.search_settings.search_age_from));
-  const [searchAgeTo, setSearchAgeTo] = useState(String(userProfile?.search_settings.search_age_to));
+  // const [searchFor, setSearchFor] = useState(userProfile?.search_settings.search_gender);
+  // const [searchAgeFrom, setSearchAgeFrom] = useState(String(userProfile?.search_settings.search_age_from));
+  // const [searchAgeTo, setSearchAgeTo] = useState(String(userProfile?.search_settings.search_age_to));
   const handleClickBack = () => {
     setSelectedAppView(APP_VIEW.MAIN);
   };
 
   const handleChangeSearchFor = (event: SelectChangeEvent) => {
-    setSearchFor(event.target.value);
+    // setSearchFor(event.target.value);
   };
 
   useEffect(() => {
@@ -107,7 +107,7 @@ function Settings() {
           alignItems: 'center',
         }}
       >
-        <Box
+        {/* <Box
           sx={{
             width: '100%',
           }}
@@ -504,7 +504,7 @@ function Settings() {
               </Box>
             </Box>
           </TabPanel>
-        </Box>
+        </Box> */}
 
         <Footer />
       </Box>

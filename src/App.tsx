@@ -8,7 +8,8 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 // import ProvideRoute from './components/routes/ProvideRoute';
 import Main from './components/Main/Main';
 import { SignInProvider } from './providers/SignInProvider/SignInProvider';
-
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 export enum AppRoutes {
   HOME = '*',
   SIGN_IN = '/sign-in',
@@ -40,6 +41,7 @@ function App() {
     <SignInProvider>
       <AppProvider>
         <RouterProvider router={router} />
+        <ToastContainer />
       </AppProvider>
     </SignInProvider>
   );
