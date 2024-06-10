@@ -9,10 +9,9 @@ import ReadSvg from '../../../../assets/svg/readed.svg';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import Advertisement from './Advertisement';
 import StoriesWrapper from './Stories';
-import AddBotPage from '../BotPage/AddBotPage';
 
 function Chats() {
-  const { setSelectedConversationId, setSelectedAppView, conversations, setAddBotOpen } = useAppState();
+  const { setSelectedConversationId, setSelectedAppView, conversations } = useAppState();
   const handleConversationClick = (conversation: Conversation) => {
     setSelectedConversationId(conversation.id);
     setSelectedAppView(APP_VIEW.CHAT);
@@ -184,7 +183,7 @@ function Chats() {
               },
             }}
             onClick={() => {
-              setAddBotOpen(true);
+              setSelectedAppView(APP_VIEW.ADD_BOT);
             }}
           >
             <AddRoundedIcon />
@@ -192,8 +191,6 @@ function Chats() {
           <Footer />
         </Box>
       </Box>
-
-      <AddBotPage />
     </>
   );
 }

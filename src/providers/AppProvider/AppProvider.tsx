@@ -27,7 +27,6 @@ export const AppContext = createContext<AppProviderContextType | null>(null);
 export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const { userAccessToken, userId } = useSignIn();
   const [isAddBotLoading, setAddBotLoading] = useState(false);
-  const [isAddBotOpen, setAddBotOpen] = useState(false);
   const [addBotData, setAddBotData] = useState<GetBotToAddResponse | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
   const [conversations, setConversations] = useState<ConversationsState>([]);
@@ -68,7 +67,6 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
   const fetchUserData = () => {
     if (userId && userAccessToken) {
-
       getUserProfile(userId, userAccessToken).then((response) => {
         console.log('getUserProfile', response);
         setUserProfile(response);
@@ -110,7 +108,6 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
       //   })
       //   .withAutomaticReconnect()
       //   .build();
-
       // setConnection(newConnection);
     }
   }, [userAccessToken]);
@@ -173,7 +170,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     switch (type) {
       case 'accept': {
         addConversation(userId || '', userAccessToken || '', addBotData?.id || '').then((response) => {
-          setAddBotOpen(false);
+          setSelectedAppView(APP_VIEW.MAIN);
           fetchUserConversations();
         });
         break;
@@ -261,8 +258,6 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     tips,
     advertisementVisibility,
     setAdvertisementVisibility,
-    isAddBotOpen,
-    setAddBotOpen,
     isAddBotLoading,
     setAddBotLoading,
     handleFetchNewBot,
@@ -271,7 +266,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     handleUpdateSettings,
     chatPhoto,
     handleAddFile,
-    setUserProfile
+    setUserProfile,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

@@ -9,6 +9,7 @@ import BotPage from './components/BotPage/BotPage';
 import { Box, CircularProgress } from '@mui/material';
 import { useSignIn } from '../../providers/SignInProvider/SignInProvider.hooks';
 import Onboarding from './components/Onboarding/Onboarding';
+import AddBotPage from './components/BotPage/AddBotPage';
 
 function Main() {
   const { selectedAppView, userProfile } = useAppState();
@@ -21,6 +22,10 @@ function Main() {
       }
       case APP_VIEW.SETTINGS: {
         return <Settings />;
+      }
+      case APP_VIEW.ADD_BOT: {
+        console.log('tyt');
+        return <AddBotPage />;
       }
       default: {
         return <Chats />;
@@ -42,7 +47,7 @@ function Main() {
       </Box>
     );
 
-    if(userProfile?.account === null){
+    if(!userProfile?.account){
       return <Onboarding></Onboarding>
     }
 

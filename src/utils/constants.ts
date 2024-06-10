@@ -12,6 +12,7 @@ export const APP_VIEW = {
   MAIN: 'main',
   CHAT: 'chat',
   SETTINGS: 'settings',
+  ADD_BOT: 'add_bot'
 };
 
 

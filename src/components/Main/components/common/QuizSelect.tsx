@@ -43,7 +43,6 @@ function QuizSelect({
         sx={{
           backgroundColor: '#fff',
           borderRadius: '12px',
-          border: 'none',
           paddingRight: '20px',
           paddingLeft: '10px',
           height: '66px',

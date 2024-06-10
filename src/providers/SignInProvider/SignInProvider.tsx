@@ -34,8 +34,7 @@ export const SignInProvider: FC<{ children: ReactNode }> = ({ children }) => {
   }, []);
 
   const handleSignIn = (username: string, password: string) => {
-    console.log('handleSignIn');
-        setSignInLoading(false);
+    setSignInLoading(false);
 
     signIn({ username, password })
       .then((response) => {

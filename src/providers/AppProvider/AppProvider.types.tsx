@@ -16,8 +16,6 @@ export type AppProviderContextType = {
   tips: string[];
   advertisementVisibility: boolean;
   setAdvertisementVisibility: (s: boolean) => void;
-  isAddBotOpen: boolean;
-  setAddBotOpen: (s: boolean) => void;
   isAddBotLoading: boolean;
   setAddBotLoading: (s: boolean) => void;
   handleFetchNewBot: (s: 'decline' | 'accept') => void;

@@ -7,6 +7,8 @@ export enum ButtonType {
   START = 'start',
   TRANSPARENT = 'transparent',
   RED_DISABLED = 'RED_DISABLED',
+  APP = 'APP',
+  APP_DISABLED = 'APP_DISABLED',
 }
 
 function QuizButton({
@@ -19,7 +21,7 @@ function QuizButton({
   type,
   children,
 }: {
-  text: string;
+  text?: string;
   variant: ButtonType;
   onClick: () => void;
   disabled?: boolean;
@@ -83,6 +85,37 @@ function QuizButton({
       case ButtonType.RED_DISABLED: {
         return {
           backgroundColor: '#18182E',
+          color: '#fff',
+          fontFamily: 'sfpro700',
+          '&:hover': {
+            backgroundColor: '#18182E',
+            opacity: isMobile ? 1 : 0.8,
+          },
+          '&:disabled': {
+            backgroundColor: '#18182E',
+            color: '#717889',
+          },
+        };
+      }
+      case ButtonType.APP: {
+        return {
+          background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
+          color: '#fff',
+          fontFamily: 'sfpro700',
+          '&:hover': {
+            backgroundColor: '#E1413E',
+            opacity: isMobile ? 1 : 0.8,
+          },
+          '&:disabled': {
+            backgroundColor: '#18182E',
+            color: '#717889',
+          },
+        };
+      }
+      case ButtonType.APP_DISABLED: {
+        return {
+          background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
+          opacity: 0.5,
           color: '#fff',
           fontFamily: 'sfpro700',
           '&:hover': {
