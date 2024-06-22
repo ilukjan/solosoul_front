@@ -1,12 +1,12 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAppState } from '../../../providers/AppProvider.hooks';
 import { AppRoutes } from '../../../App';
+import { useSignIn } from '../../../providers/SignInProvider/SignInProvider.hooks';
 
 const PrivateRoute = ({ component: Component, ...rest }: { component: React.FC }) => {
-  const { isUserAuthorized } = useAppState();
+  const { userAccessToken } = useSignIn();
 
-  if (!isUserAuthorized) {
+  if (!userAccessToken) {
     return <Navigate to={AppRoutes.SIGN_IN} />;
   }
 

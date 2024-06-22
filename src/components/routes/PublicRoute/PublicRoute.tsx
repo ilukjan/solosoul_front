@@ -1,14 +1,15 @@
 import React from 'react';
 import { Navigate } from 'react-router-dom';
-import { useAppState } from '../../../providers/AppProvider.hooks';
+import { useAppState } from '../../../providers/AppProvider/AppProvider.hooks';
 import { AppRoutes } from '../../../App';
+import { useSignIn } from '../../../providers/SignInProvider/SignInProvider.hooks';
 // import { useAppState } from '../../providers/AppProvider.hooks';
 // import { AppRoutes } from '../../utils/constants';
 
 const PublicRoute = ({ component: Component, ...rest }: { component: React.FC }) => {
-  const { isUserAuthorized } = useAppState();
+  const { userAccessToken } = useSignIn();
 
-  if (isUserAuthorized) {
+  if (userAccessToken) {
     return <Navigate to={AppRoutes.MAIN} />;
   }
 

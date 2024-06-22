@@ -2,7 +2,7 @@ import React from 'react';
 import { Box, Typography } from '@mui/material';
 
 import ChatIcon from '../../../assets/svg/chats_icon.svg';
-import { useAppState } from '../../../providers/AppProvider.hooks';
+import { useAppState } from '../../../providers/AppProvider/AppProvider.hooks';
 import { APP_COLORS, APP_VIEW } from '../../../utils/constants';
 
 function Footer() {
@@ -58,7 +58,7 @@ function Footer() {
             height: '25px',
             background: 'lightgrey',
             borderRadius: '50%',
-            backgroundImage: `url(${userProfile?.img})`,
+            // backgroundImage: `url(${userProfile?.img})`,
             backgroundSize: 'contain',
             backgroundPosition: 'center',
           }}
