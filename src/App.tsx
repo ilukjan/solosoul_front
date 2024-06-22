@@ -29,8 +29,6 @@ const router = createBrowserRouter([
   },
 ]);
 
-console.log('0.000006');
-
 function App() {
   return (
     <TelegramProvider>

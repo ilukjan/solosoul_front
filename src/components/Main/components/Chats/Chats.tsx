@@ -22,6 +22,18 @@ function Chats() {
     <>
       <Box
         sx={{
+          position: 'fixed',
+          bottom: 0,
+          left: 0,
+          color: 'gray',
+          zIndex: 9999,
+          fontSize: '8px',
+        }}
+      >
+        0.1
+      </Box>
+      <Box
+        sx={{
           position: 'absolute',
           width: '100%',
           top: 0,
