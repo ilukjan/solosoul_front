@@ -7,6 +7,7 @@ import PrivateRoute from './components/routes/PrivateRoute';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ProvideRoute from './components/routes/ProvideRoute';
 import Main from './components/Main/Main';
+import { TelegramProvider } from './providers/TelegramProvider/TelegramProvider';
 
 export enum AppRoutes {
   HOME = '*',
@@ -28,13 +29,15 @@ const router = createBrowserRouter([
   },
 ]);
 
-console.log('0.000004');
+console.log('0.000005');
 
 function App() {
   return (
-    <AppProvider>
-      <RouterProvider router={router} />
-    </AppProvider>
+    <TelegramProvider>
+      <AppProvider>
+        <RouterProvider router={router} />
+      </AppProvider>
+    </TelegramProvider>
   );
 }
 

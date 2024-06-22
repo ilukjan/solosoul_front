@@ -8,6 +8,7 @@ import { useAppState } from '../../../../providers/AppProvider.hooks';
 import { linearProgressClasses } from '@mui/material/LinearProgress';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import { useTelegram } from '../../../../providers/TelegramProvider/TelegramProvider';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -56,6 +57,7 @@ const CustomProgress = ({
 
 function Settings() {
   const { setSelectedAppView, userProfile, fetchUserData, handleUpdateSettings } = useAppState();
+  const { user } = useTelegram();
   const [searchFor, setSearchFor] = useState(userProfile?.search_settings.search_gender);
   const [searchAgeFrom, setSearchAgeFrom] = useState(String(userProfile?.search_settings.search_age_from));
   const [searchAgeTo, setSearchAgeTo] = useState(String(userProfile?.search_settings.search_age_to));
@@ -191,7 +193,7 @@ function Settings() {
                   textShadow: '1px 1px 2px #000',
                 }}
               >
-                {userProfile?.username}
+                {user?.first_name} {user?.last_name}
               </Typography>
               <Typography
                 sx={{

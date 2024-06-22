@@ -22,6 +22,7 @@ import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
 import { APP_STORAGE_KEYS } from '../services/constants';
 import { APP_VIEW } from '../utils/constants';
 import { getMessagesFromLocalStorage, saveMessageToLocalStorage } from '../utils/localStorage';
+import { useTelegram } from './TelegramProvider/TelegramProvider';
 
 export const AppContext = createContext<AppProviderContextType | null>(null);
 
@@ -42,7 +43,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [advertisementVisibility, setAdvertisementVisibility] = useState(false);
   const [tips, setTips] = useState<string[]>([]);
   const [chatPhoto, setChatPhoto] = useState<string | null>(null);
-
+  const { user: telegramUser } = useTelegram();
   useEffect(() => {
     setTimeout(() => {
       setTips((prev) => [
@@ -117,6 +118,14 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
       fetchBotToAdd();
     }
   }, [userId, userAccessToken]);
+
+  // AUTO LOGIN FROM TELEGRAM
+  useEffect(() => {
+    if (telegramUser) {
+      console.log('AUTO LOGIN');
+      handleSignIn('mikle', 'secret');
+    }
+  }, [telegramUser]);
 
   const handleSignIn = (username: string, password: string) => {
     setSignInLoading(true);
