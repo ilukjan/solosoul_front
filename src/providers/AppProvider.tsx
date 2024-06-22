@@ -3,6 +3,7 @@ import {
   AppProviderContextType,
   ConversationsState,
   Message,
+  SocketReceiveMediaMessageType,
   SocketReceiveMessageType,
   SocketSystemMessageType,
 } from './AppProvider.types';
@@ -168,9 +169,8 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
           await connection.start();
 
           connection.on('ReceiveMessage', (ReceiveMessageResponse) => {
-            console.log('ReceiveMessageResponse', typeof ReceiveMessageResponse, JSON.parse(ReceiveMessageResponse));
-
             const answerMessage: SocketReceiveMessageType = JSON.parse(ReceiveMessageResponse);
+            console.log('ReceiveMessageResponse', answerMessage);
 
             setConversations((prev) => {
               const updatedConversations: ConversationsState = prev.map((conv) => {
@@ -184,6 +184,32 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
                   };
 
                   saveMessageToLocalStorage(newMessage, answerMessage.ConversationId);
+
+                  return {
+                    ...conv,
+                    messages: [...conv.messages, newMessage],
+                  };
+                } else {
+                  return conv;
+                }
+              });
+              return updatedConversations;
+            });
+          });
+
+          connection.on('ReceiveMediaMessage', (ReceiveMessageResponse) => {
+            const mediaAnswerMessage: SocketReceiveMediaMessageType = JSON.parse(ReceiveMessageResponse);
+            console.log('ReceiveMediaMessageResponse', mediaAnswerMessage);
+
+            setConversations((prev) => {
+              const updatedConversations: ConversationsState = prev.map((conv) => {
+                if (conv.id === mediaAnswerMessage.ConversationId) {
+                  const newMessage: Message = {
+                    fromYou: false,
+                    text: 'bot_image_message_key',
+                    timestamp: `${new Date().getHours()}:${new Date().getMinutes()}`,
+                    image: mediaAnswerMessage.Image,
+                  };
 
                   return {
                     ...conv,

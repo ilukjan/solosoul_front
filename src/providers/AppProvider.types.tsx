@@ -42,6 +42,7 @@ export type Message = {
   fromYou: boolean;
   text: string;
   timestamp: string;
+  image?: string;
 };
 
 export type ConversationsState = Array<{
@@ -59,6 +60,17 @@ export type SocketReceiveMessageType = {
   Timestamp: string;
   Status: number;
   Message: string;
+};
+
+export type SocketReceiveMediaMessageType = {
+  Image: string;
+  ConversationId: string;
+  Id: string;
+  UserId: string;
+  BotId: string;
+  FromId: string;
+  Timestamp: string;
+  Status: number;
 };
 
 export type SocketSystemMessageType = {

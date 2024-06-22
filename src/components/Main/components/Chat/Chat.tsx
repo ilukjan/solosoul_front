@@ -202,7 +202,7 @@ function Chat() {
                 marginRight: message.fromYou ? '10px' : 'auto',
               }}
             >
-              {message.text === 'user_image_message_key' ? (
+              {message.text === 'user_image_message_key' || message.text === 'bot_image_message_key' ? (
                 <Box
                   sx={{
                     maxWidth: '100%',
@@ -213,7 +213,16 @@ function Chat() {
                     },
                   }}
                 >
-                  <img src={chatPhoto || ''} alt="user photo"></img>
+                  <img
+                    src={
+                      message.text === 'bot_image_message_key'
+                        ? // TODO TO DO CHANGE FILE FORMAT
+                          `data:image/jpeg;base64, ${message.image}`
+                        : // message.image
+                          chatPhoto || ''
+                    }
+                    alt="Solo soul"
+                  ></img>
                 </Box>
               ) : (
                 <Typography
