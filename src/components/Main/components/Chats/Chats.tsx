@@ -1,7 +1,7 @@
-import React from 'react';
-import { Box, Typography } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Button, Modal, Typography } from '@mui/material';
 
-import { useAppState } from '../../../../providers/AppProvider/AppProvider.hooks';
+import { useAppState } from '../../../../providers/AppProvider.hooks';
 import Footer from '../../../common/Footer/Footer';
 import { Conversation } from '../../../../services/requests';
 import { APP_COLORS, APP_VIEW } from '../../../../utils/constants';
@@ -9,9 +9,10 @@ import ReadSvg from '../../../../assets/svg/readed.svg';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import Advertisement from './Advertisement';
 import StoriesWrapper from './Stories';
+import AddBotPage from '../BotPage/AddBotPage';
 
 function Chats() {
-  const { setSelectedConversationId, setSelectedAppView, conversations } = useAppState();
+  const { setSelectedConversationId, setSelectedAppView, conversations, setAddBotOpen } = useAppState();
   const handleConversationClick = (conversation: Conversation) => {
     setSelectedConversationId(conversation.id);
     setSelectedAppView(APP_VIEW.CHAT);
@@ -183,7 +184,7 @@ function Chats() {
               },
             }}
             onClick={() => {
-              setSelectedAppView(APP_VIEW.ADD_BOT);
+              setAddBotOpen(true);
             }}
           >
             <AddRoundedIcon />
@@ -191,6 +192,8 @@ function Chats() {
           <Footer />
         </Box>
       </Box>
+
+      <AddBotPage />
     </>
   );
 }

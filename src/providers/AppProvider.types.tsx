@@ -1,6 +1,17 @@
-import { ConversationBot, GetBotToAddResponse, UserProfileResponse } from '../../services/requests';
+import {
+  Conversation,
+  ConversationBot,
+  GetAllConversationsResponse,
+  GetBotToAddResponse,
+  UserProfileResponse,
+} from '../services/requests';
 
 export type AppProviderContextType = {
+  isUserAuthorized: boolean;
+  handleSignIn: (username: string, password: string) => void;
+  isSignInLoading: boolean;
+  signInError: boolean;
+  setSignInError: (s: boolean) => void;
   handleSendMessage: (message: string) => void;
   conversations: ConversationsState;
   selectedAppView: string;
@@ -8,7 +19,6 @@ export type AppProviderContextType = {
   selectedConversationId: string | null;
   setSelectedConversationId: (value: string | null) => void;
   userProfile: UserProfileResponse | null;
-  setUserProfile: React.Dispatch<React.SetStateAction<UserProfileResponse | null>>;
   selectedBotId: string | null;
   setSelectedBotId: (type: string | null) => void;
   advertisement: string | null;
@@ -16,9 +26,11 @@ export type AppProviderContextType = {
   tips: string[];
   advertisementVisibility: boolean;
   setAdvertisementVisibility: (s: boolean) => void;
+  isAddBotOpen: boolean;
+  setAddBotOpen: (s: boolean) => void;
   isAddBotLoading: boolean;
   setAddBotLoading: (s: boolean) => void;
-  handleFetchNewBot: (s: 'decline' | 'accept', data: SearchDataType) => void;
+  handleFetchNewBot: (s: 'decline' | 'accept') => void;
   addBotData: GetBotToAddResponse | null;
   fetchUserData: () => void;
   handleUpdateSettings: (search_gender: string, search_age_from: number, search_age_to: number) => void;
@@ -55,11 +67,4 @@ export type SocketSystemMessageType = {
   MessageType: number;
   Timestamp: string;
   Message: string;
-};
-export type SearchDataType = {
-  gender: string;
-  nation: string;
-  figure: string;
-  age_from: number;
-  age_to: number;
 };

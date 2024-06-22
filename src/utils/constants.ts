@@ -12,12 +12,4 @@ export const APP_VIEW = {
   MAIN: 'main',
   CHAT: 'chat',
   SETTINGS: 'settings',
-  ADD_BOT: 'add_bot'
 };
-
-
-export enum Gender {
-  MALE = 'Male',
-  FEMALE = 'Female',
-  NON_BINARY = 'Non_binary',
-}

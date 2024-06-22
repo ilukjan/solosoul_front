@@ -3,7 +3,6 @@ import {
   AppProviderContextType,
   ConversationsState,
   Message,
-  SearchDataType,
   SocketReceiveMessageType,
   SocketSystemMessageType,
 } from './AppProvider.types';
@@ -16,20 +15,25 @@ import {
   getUserProfile,
   sendMediaMessage,
   sendMessage,
+  signIn,
   updateSettings,
-} from '../../services/requests';
+} from '../services/requests';
 import { HubConnection, HubConnectionBuilder } from '@microsoft/signalr';
-import { APP_VIEW } from '../../utils/constants';
-import { getMessagesFromLocalStorage, saveMessageToLocalStorage } from '../../utils/localStorage';
-import { useSignIn } from '../SignInProvider/SignInProvider.hooks';
+import { APP_STORAGE_KEYS } from '../services/constants';
+import { APP_VIEW } from '../utils/constants';
+import { getMessagesFromLocalStorage, saveMessageToLocalStorage } from '../utils/localStorage';
 
 export const AppContext = createContext<AppProviderContextType | null>(null);
 
 export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
-  const { userAccessToken, userId } = useSignIn();
+  const [userAccessToken, setUserAccessToken] = useState<string | null>(null);
+  const [isSignInLoading, setSignInLoading] = useState(false);
   const [isAddBotLoading, setAddBotLoading] = useState(false);
+  const [isAddBotOpen, setAddBotOpen] = useState(false);
   const [addBotData, setAddBotData] = useState<GetBotToAddResponse | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
   const [userProfile, setUserProfile] = useState<UserProfileResponse | null>(null);
+  const [signInError, setSignInError] = useState(false);
   const [conversations, setConversations] = useState<ConversationsState>([]);
   const [selectedConversationId, setSelectedConversationId] = useState<string | null>(null);
   const [selectedAppView, setSelectedAppView] = useState(APP_VIEW.MAIN);
@@ -39,8 +43,6 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [tips, setTips] = useState<string[]>([]);
   const [chatPhoto, setChatPhoto] = useState<string | null>(null);
 
-  console.log('userProfile',userProfile);
-
   useEffect(() => {
     setTimeout(() => {
       setTips((prev) => [
@@ -49,6 +51,22 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
         'Don’t be afraid, just write something like “hi there” and enjoy communication ☺️ 🫡',
       ]);
     }, 100);
+  }, []);
+
+  useEffect(() => {
+    const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
+    const access_token = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
+    const user_id = window.localStorage.getItem(APP_STORAGE_KEYS.USER_ID);
+
+    if (token_expired_date) {
+      if (new Date(token_expired_date) > new Date()) {
+        setUserAccessToken(access_token);
+        setUserId(user_id);
+      } else {
+        window.localStorage.removeItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
+        window.localStorage.removeItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
+      }
+    }
   }, []);
 
   const fetchUserConversations = () => {
@@ -77,11 +95,11 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const fetchBotToAdd = (data:  SearchDataType) => {
+  const fetchBotToAdd = () => {
     if (userId && userAccessToken) {
       setAddBotLoading(true);
 
-      getBotToAdd(userId || '', userAccessToken || '', data).then((response) => {
+      getBotToAdd(userId || '', userAccessToken || '').then((response) => {
         console.log('getBotToAdd', response);
         setAddBotData(response);
         setAddBotLoading(false);
@@ -93,22 +111,44 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     if (userId && userAccessToken) {
       fetchUserConversations();
+
       fetchUserData();
+
+      fetchBotToAdd();
     }
   }, [userId, userAccessToken]);
 
+  const handleSignIn = (username: string, password: string) => {
+    setSignInLoading(true);
+    signIn({ username, password })
+      .then((response) => {
+        setUserAccessToken(response.access_token);
+        setUserId(response.user_id);
+        window.localStorage.setItem(APP_STORAGE_KEYS.ACCESS_TOKEN, response.access_token);
+        window.localStorage.setItem(APP_STORAGE_KEYS.USER_ID, response.user_id);
+        window.localStorage.setItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL, response.token_valid_till);
+      })
+      .catch((err) => {
+        console.error('sign in error: ', err);
+        setSignInError(true);
+      })
+      .finally(() => {
+        setSignInLoading(false);
+      });
+  };
   const [connection, setConnection] = useState<HubConnection | null>(null);
 
   useEffect(() => {
     if (userAccessToken) {
-      // const newConnection = new HubConnectionBuilder()
-      //   .withUrl('https://solosoul.azurewebsites.net/botChatHub', {
-      //     // skipNegotiation: true,
-      //     // transport: HttpTransportType.WebSockets,
-      //   })
-      //   .withAutomaticReconnect()
-      //   .build();
-      // setConnection(newConnection);
+      const newConnection = new HubConnectionBuilder()
+        .withUrl('https://solosoul.azurewebsites.net/botChatHub', {
+          // skipNegotiation: true,
+          // transport: HttpTransportType.WebSockets,
+        })
+        .withAutomaticReconnect()
+        .build();
+
+      setConnection(newConnection);
     }
   }, [userAccessToken]);
 
@@ -166,17 +206,17 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     })();
   }, [connection]);
 
-  const handleFetchNewBot = (type: 'decline' | 'accept', data: SearchDataType) => {
+  const handleFetchNewBot = (type: 'decline' | 'accept') => {
     switch (type) {
       case 'accept': {
         addConversation(userId || '', userAccessToken || '', addBotData?.id || '').then((response) => {
-          setSelectedAppView(APP_VIEW.MAIN);
+          setAddBotOpen(false);
           fetchUserConversations();
         });
         break;
       }
       case 'decline': {
-        fetchBotToAdd(data);
+        fetchBotToAdd();
         break;
       }
     }
@@ -213,7 +253,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const handleUpdateSettings = (search_gender: string, search_age_from: number, search_age_to: number) => {
     if (userAccessToken && userId) {
       updateSettings(userId, userAccessToken, search_gender, search_age_from, search_age_to).then((response) => {
-        // fetchBotToAdd();
+        fetchBotToAdd();
       });
     }
   };
@@ -244,6 +284,11 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   };
 
   const value: AppProviderContextType = {
+    isUserAuthorized: userAccessToken !== null,
+    handleSignIn,
+    isSignInLoading,
+    signInError,
+    setSignInError,
     handleSendMessage,
     selectedAppView,
     setSelectedAppView,
@@ -258,6 +303,8 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     tips,
     advertisementVisibility,
     setAdvertisementVisibility,
+    isAddBotOpen,
+    setAddBotOpen,
     isAddBotLoading,
     setAddBotLoading,
     handleFetchNewBot,
@@ -266,7 +313,6 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     handleUpdateSettings,
     chatPhoto,
     handleAddFile,
-    setUserProfile,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

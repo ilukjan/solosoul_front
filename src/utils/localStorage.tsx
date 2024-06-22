@@ -1,4 +1,4 @@
-import { Message } from '../providers/AppProvider/AppProvider.types';
+import { Message } from '../providers/AppProvider.types';
 
 export const saveMessageToLocalStorage = (newMessage: Message, conversationId: string) => {
   const data = window.localStorage.getItem(conversationId);

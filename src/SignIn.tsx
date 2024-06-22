@@ -2,13 +2,13 @@ import React, { useState } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 
 import background from './assets/images/sign_in_bg.webp';
+import { useAppState } from './providers/AppProvider.hooks';
 import { APP_COLORS } from './utils/constants';
-import { useSignIn } from './providers/SignInProvider/SignInProvider.hooks';
 
 function SignIn() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const { handleSignIn, setSignInError, signInError, isSignInLoading } = useSignIn();
+  const { handleSignIn, setSignInError, signInError, isSignInLoading } = useAppState();
 
   return (
     <Box

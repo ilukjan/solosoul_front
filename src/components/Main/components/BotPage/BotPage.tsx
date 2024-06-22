@@ -3,7 +3,7 @@ import { Box, Typography } from '@mui/material';
 import ArrowBack from '../../../../assets/svg/arrow_back.svg';
 
 import { APP_COLORS } from '../../../../utils/constants';
-import { useAppState } from '../../../../providers/AppProvider/AppProvider.hooks';
+import { useAppState } from '../../../../providers/AppProvider.hooks';
 
 function BotPage() {
   const { selectedBotId, setSelectedBotId, conversations } = useAppState();

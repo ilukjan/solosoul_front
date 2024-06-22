@@ -1,19 +1,14 @@
 import React, { useMemo } from 'react';
 
-import { useAppState } from '../../providers/AppProvider/AppProvider.hooks';
+import { useAppState } from '../../providers/AppProvider.hooks';
 import Chat from './components/Chat/Chat';
 import Chats from './components/Chats/Chats';
 import Settings from './components/Settings/Settings';
 import { APP_VIEW } from '../../utils/constants';
 import BotPage from './components/BotPage/BotPage';
-import { Box, CircularProgress } from '@mui/material';
-import { useSignIn } from '../../providers/SignInProvider/SignInProvider.hooks';
-import Onboarding from './components/Onboarding/Onboarding';
-import AddBotPage from './components/BotPage/AddBotPage';
 
 function Main() {
-  const { selectedAppView, userProfile } = useAppState();
-  const { isSignInLoading } = useSignIn();
+  const { selectedAppView } = useAppState();
 
   const getAppView = useMemo(() => {
     switch (selectedAppView) {
@@ -23,33 +18,11 @@ function Main() {
       case APP_VIEW.SETTINGS: {
         return <Settings />;
       }
-      case APP_VIEW.ADD_BOT: {
-        console.log('tyt');
-        return <AddBotPage />;
-      }
       default: {
         return <Chats />;
       }
     }
   }, [selectedAppView]);
-
-  if (isSignInLoading)
-    return (
-      <Box
-        sx={{
-          height: '100vh',
-          display: 'flex',
-          justifyContent: 'center',
-          alignItems: 'center',
-        }}
-      >
-        <CircularProgress size={80}></CircularProgress>
-      </Box>
-    );
-
-    if(!userProfile?.account){
-      return <Onboarding></Onboarding>
-    }
 
   return (
     <>

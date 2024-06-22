@@ -1,118 +1,19 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo } from 'react';
 import { Box, CircularProgress, Typography } from '@mui/material';
 import ArrowBack from '../../../../assets/svg/arrow_back.svg';
-import { APP_COLORS, APP_VIEW, Gender } from '../../../../utils/constants';
-import { useAppState } from '../../../../providers/AppProvider/AppProvider.hooks';
+import { APP_COLORS } from '../../../../utils/constants';
+import { useAppState } from '../../../../providers/AppProvider.hooks';
 import PersonAddAlt1Icon from '@mui/icons-material/PersonAddAlt1';
-import SearchIcon from '@mui/icons-material/Search';
-import QuizSelect from '../common/QuizSelect';
-import QuizButton, { ButtonType } from '../common/QuizButton';
-import { ConversationBot } from '../../../../services/requests';
+import PersonOffIcon from '@mui/icons-material/PersonOff';
 
 function AddBotPage() {
-  const {
-    isAddBotLoading,
-     handleFetchNewBot, addBotData,
-    setSelectedAppView,
-  } = useAppState();
-  const [gender, setGender] = useState<string>('');
-  const [nation, setNation] = useState<string>('');
-  const [age, setAge] = useState<string>('');
-  const [figure, setFigure] = useState<string>('');
+  const { isAddBotLoading, handleFetchNewBot, isAddBotOpen, addBotData, setAddBotOpen } = useAppState();
+
   const botProfile = useMemo(() => {
     return addBotData?.bot;
   }, [addBotData]);
 
-  const handleSearch = (type: 'accept'|'decline') => {
-    if(isSearchDisabled) return ;
-    console.log('data', gender, nation, age, figure);
-    const age_from = Number(age)
-    const age_to = Number(age) + 10
-    handleFetchNewBot(type, {
-      gender,
-      nation,
-      figure,
-      age_to,
-      age_from,
-    });
-    // setBotProfile({
-    //   id: 'string;',
-    //   username: 'Lara Croft',
-    //   settings: {
-    //     gender: 'Female',
-    //     age: 29,
-    //   },
-    //   profile: {
-    //     bio: 'Some description description description description description description description',
-    //   },
-    //   img: 'https://cdn.britannica.com/16/254816-050-41C9577A/Google-logo-Googleplex-headquarters-Mountain-View-California.jpg',
-    // });
-  };
-
-  const Ages = [
-    {
-      value: 20,
-      label: '20 - 30',
-    },
-    {
-      value: 30,
-      label: '30 - 40',
-    },
-    {
-      value: 40,
-      label: '40 - 50',
-    },
-    {
-      value: 50,
-      label: '50 - 60',
-    },
-  ];
-  const Genders = [
-    {
-      value: Gender.MALE,
-      label: 'Male',
-    },
-    {
-      value: Gender.FEMALE,
-      label: 'Female',
-    },
-    {
-      value: Gender.NON_BINARY,
-      label: 'Non-binary',
-    },
-  ];
-
-  const Nations = [
-    {
-      value: 'European',
-      label: 'European',
-    },
-    {
-      value: 'Asian',
-      label: 'Asian',
-    },
-    {
-      value: 'African',
-      label: 'African',
-    },
-  ];
-  const Figures = [
-    {
-      value: 'Slim',
-      label: 'Slim',
-    },
-    {
-      value: 'Regular',
-      label: 'Regular',
-    },
-    {
-      value: 'Plus_Size',
-      label: 'Plus size',
-    },
-  ];
-  const isSearchDisabled = useMemo(() => {
-    return gender === '' || nation === '' || age === '' || figure === '';
-  }, [gender, age, nation, figure]);
+  if (!isAddBotOpen) return null;
 
   return (
     <Box
@@ -152,7 +53,7 @@ function AddBotPage() {
               boxShadow: 'inset 0px 55px 55px -43px rgba(66, 68, 90, 1)',
             }}
             onClick={() => {
-              setSelectedAppView(APP_VIEW.MAIN);
+              setAddBotOpen(false);
             }}
           >
             <Box
@@ -210,193 +111,107 @@ function AddBotPage() {
               <Box
                 sx={{
                   position: 'relative',
-                  // border: '1px solid red',
                 }}
               >
                 <Box
                   sx={{
-                    minHeight: '100px',
+                    minHeight: '200px',
                     '& img': {
                       maxWidth: '100%',
-                      // border: '1px solid red',
                     },
                   }}
                 >
-                  {botProfile && <img src={botProfile?.img} alt="profile"></img>}
+                  <img src={botProfile?.img} alt="profile"></img>
                 </Box>
               </Box>
-              {botProfile && (
+              <Box
+                sx={{
+                  marginBottom: '120px',
+                  '& .title': {
+                    fontFamily: 'sfpro400',
+                    fontSize: '14px',
+                    color: APP_COLORS.textMain,
+                    margin: '0 10px',
+                  },
+                  '& .subTitle': {
+                    fontFamily: 'sfpro400',
+                    fontSize: '16px',
+                    margin: '0 10px',
+                    color: APP_COLORS.blue,
+                  },
+                  '& .divider': {
+                    height: '1px',
+                    width: '100%',
+                    background: APP_COLORS.border,
+                    margin: '10px 0',
+                    opacity: 0.5,
+                  },
+                  '& .MuiLinearProgress-root': {
+                    height: '20px',
+                    borderRadius: '10px',
+                    margin: '10px',
+                  },
+                  '& .MuiLinearProgress-bar': {
+                    borderRadius: '10px',
+                  },
+                }}
+              >
                 <Box
                   sx={{
-                    '& .title': {
-                      fontFamily: 'sfpro400',
-                      fontSize: '14px',
-                      color: APP_COLORS.textMain,
-                      margin: '0 10px',
-                    },
-                    '& .subTitle': {
-                      fontFamily: 'sfpro400',
-                      fontSize: '16px',
-                      margin: '0 10px',
-                      color: APP_COLORS.blue,
-                    },
-                    '& .divider': {
-                      height: '1px',
-                      width: '100%',
-                      background: APP_COLORS.border,
-                      margin: '10px 0',
-                      opacity: 0.5,
-                    },
-                    '& .MuiLinearProgress-root': {
-                      height: '20px',
-                      borderRadius: '10px',
-                      margin: '10px',
-                    },
-                    '& .MuiLinearProgress-bar': {
-                      borderRadius: '10px',
-                    },
+                    background: APP_COLORS.black,
+                    borderRadius: '10px',
+                    padding: '10px 0',
+                    margin: '10px',
                   }}
                 >
                   <Box
                     sx={{
-                      background: APP_COLORS.black,
-                      borderRadius: '10px',
-                      padding: '10px 0',
-                      margin: '10px',
+                      display: 'flex',
+                      justifyContent: 'space-between',
+                      padding: '0 10px',
                     }}
                   >
-                    <Box
+                    <Typography
                       sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        padding: '0 10px',
+                        fontFamily: 'sfpro400',
+                        fontSize: '18px',
+                        color: APP_COLORS.textMain,
+                        textShadow: '1px 1px 2px #000',
                       }}
                     >
-                      <Typography
-                        sx={{
-                          fontFamily: 'sfpro400',
-                          fontSize: '18px',
-                          color: APP_COLORS.textMain,
-                          textShadow: '1px 1px 2px #000',
-                        }}
-                      >
-                        {botProfile?.username}
-                      </Typography>
-                      <Typography className="subTitle">
-                        {botProfile?.settings.gender}, {botProfile?.settings.age}
-                      </Typography>
-                    </Box>
-                    <Box className="divider"></Box>
-                    <Typography className="title">{botProfile?.profile.bio}</Typography>
+                      {botProfile?.username}
+                    </Typography>
+                    <Typography className="subTitle">
+                      {botProfile?.settings.gender}, {botProfile?.settings.age}
+                    </Typography>
                   </Box>
+                  <Box className="divider"></Box>
+                  <Typography className="title">{botProfile?.profile.bio}</Typography>
                 </Box>
-              )}
+              </Box>
+              <Box
+                sx={{
+                  position: 'absolute',
+                  width: '100%',
+                  maxWidth: '430px',
+                  bottom: 0,
+                  display: 'flex',
+                  justifyContent: 'space-around',
+                  boxShadow: `inset 0px -135px 25px -28px ${APP_COLORS.darkBlack}`,
+                  padding: '10px 0',
+                }}
+              >
+                <PersonOffIcon
+                  onClick={() => handleFetchNewBot('decline')}
+                  sx={{ color: 'error.main', width: '100px', height: '100px', opacity: 0.8 }}
+                ></PersonOffIcon>
+                <PersonAddAlt1Icon
+                  onClick={() => handleFetchNewBot('accept')}
+                  sx={{ color: 'success.main', width: '100px', height: '100px' }}
+                ></PersonAddAlt1Icon>
+              </Box>
             </>
           )}
-          <Box
-            sx={{
-              padding: '10px',
-            }}
-          >
-            <Box
-              sx={{
-                display: 'flex',
-                width: '100%',
-                flexDirection: 'column',
-                gap: '10px',
-              }}
-            >
-              <Box
-                sx={{
-                  width: '100%',
-                  display: 'flex',
-                  gap: '10px',
-                }}
-              >
-                <QuizSelect
-                  label="Gender"
-                  values={Genders}
-                  value={gender}
-                  onChange={(e) => {
-                    setGender(String(e.target.value));
-                  }}
-                />
-                <QuizSelect
-                  label="Nation"
-                  values={Nations}
-                  value={nation}
-                  onChange={(e) => {
-                    setNation(String(e.target.value));
-                  }}
-                />
-              </Box>
-              <Box
-                sx={{
-                  width: '100%',
-                  display: 'flex',
-                  gap: '10px',
-                }}
-              >
-                <QuizSelect
-                  label="Age"
-                  values={Ages}
-                  value={age}
-                  onChange={(e) => {
-                    setAge(String(e.target.value));
-                  }}
-                />
-                <QuizSelect
-                  label="Figure"
-                  values={Figures}
-                  value={figure}
-                  onChange={(e) => {
-                    setFigure(String(e.target.value));
-                  }}
-                />
-              </Box>
-            </Box>
-          </Box>
-          <Box
-            sx={{
-              padding: '20px 10px',
-            }}
-          >
-            {botProfile ? (
-              <Box
-                sx={{
-                  display: 'flex',
-                  gap: '10px',
-                }}
-              >
-                <QuizButton
-                  text="Search new"
-                  onClick={() => {
-                    handleSearch('decline');
-                  }}
-                  variant={ButtonType.BLACK}
-                >
-                  <SearchIcon style={{ marginLeft: '10px' }} />
-                </QuizButton>
-                <QuizButton
-                  text="Add this"
-                  onClick={() => {
-                    handleSearch('accept');
-                  }}
-                  variant={ButtonType.APP}
-                >
-                  <PersonAddAlt1Icon style={{ marginLeft: '10px' }} />
-                </QuizButton>
-              </Box>
-            ) : (
-              <QuizButton
-                text="Search!"
-                onClick={() => {
-                  handleSearch('decline');
-                }}
-                variant={isSearchDisabled ? ButtonType.APP_DISABLED : ButtonType.APP}
-              ></QuizButton>
-            )}
-          </Box>
         </Box>
       </Box>
     </Box>

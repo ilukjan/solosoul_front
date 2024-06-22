@@ -4,7 +4,7 @@ import ArrowBack from '../../../../assets/svg/arrow_back.svg';
 
 import Footer from '../../../common/Footer/Footer';
 import { APP_COLORS, APP_VIEW } from '../../../../utils/constants';
-import { useAppState } from '../../../../providers/AppProvider/AppProvider.hooks';
+import { useAppState } from '../../../../providers/AppProvider.hooks';
 import { linearProgressClasses } from '@mui/material/LinearProgress';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
@@ -56,15 +56,15 @@ const CustomProgress = ({
 
 function Settings() {
   const { setSelectedAppView, userProfile, fetchUserData, handleUpdateSettings } = useAppState();
-  // const [searchFor, setSearchFor] = useState(userProfile?.search_settings.search_gender);
-  // const [searchAgeFrom, setSearchAgeFrom] = useState(String(userProfile?.search_settings.search_age_from));
-  // const [searchAgeTo, setSearchAgeTo] = useState(String(userProfile?.search_settings.search_age_to));
+  const [searchFor, setSearchFor] = useState(userProfile?.search_settings.search_gender);
+  const [searchAgeFrom, setSearchAgeFrom] = useState(String(userProfile?.search_settings.search_age_from));
+  const [searchAgeTo, setSearchAgeTo] = useState(String(userProfile?.search_settings.search_age_to));
   const handleClickBack = () => {
     setSelectedAppView(APP_VIEW.MAIN);
   };
 
   const handleChangeSearchFor = (event: SelectChangeEvent) => {
-    // setSearchFor(event.target.value);
+    setSearchFor(event.target.value);
   };
 
   useEffect(() => {
@@ -107,7 +107,7 @@ function Settings() {
           alignItems: 'center',
         }}
       >
-        {/* <Box
+        <Box
           sx={{
             width: '100%',
           }}
@@ -504,7 +504,7 @@ function Settings() {
               </Box>
             </Box>
           </TabPanel>
-        </Box> */}
+        </Box>
 
         <Footer />
       </Box>

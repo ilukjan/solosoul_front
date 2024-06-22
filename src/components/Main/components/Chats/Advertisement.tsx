@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Box } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
-import { useAppState } from '../../../../providers/AppProvider/AppProvider.hooks';
+import { useAppState } from '../../../../providers/AppProvider.hooks';
 
 function Advertisement() {
   const { advertisement, setAdvertisementVisibility, advertisementVisibility } = useAppState();
