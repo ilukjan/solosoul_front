@@ -12,29 +12,41 @@ import { ConversationBot } from '../../../../services/requests';
 function AddBotPage() {
   const {
     isAddBotLoading,
-    //  handleFetchNewBot, addBotData,
+     handleFetchNewBot, addBotData,
     setSelectedAppView,
   } = useAppState();
-  const [botProfile, setBotProfile] = useState<ConversationBot | null>(null);
   const [gender, setGender] = useState<string>('');
   const [nation, setNation] = useState<string>('');
   const [age, setAge] = useState<string>('');
   const [figure, setFigure] = useState<string>('');
+  const botProfile = useMemo(() => {
+    return addBotData?.bot;
+  }, [addBotData]);
 
-  const handleSearch = () => {
+  const handleSearch = (type: 'accept'|'decline') => {
+    if(isSearchDisabled) return ;
     console.log('data', gender, nation, age, figure);
-    setBotProfile({
-      id: 'string;',
-      username: 'Lara Croft',
-      settings: {
-        gender: 'Female',
-        age: 29,
-      },
-      profile: {
-        bio: 'Some description description description description description description description',
-      },
-      img: 'https://cdn.britannica.com/16/254816-050-41C9577A/Google-logo-Googleplex-headquarters-Mountain-View-California.jpg',
+    const age_from = Number(age)
+    const age_to = Number(age) + 10
+    handleFetchNewBot(type, {
+      gender,
+      nation,
+      figure,
+      age_to,
+      age_from,
     });
+    // setBotProfile({
+    //   id: 'string;',
+    //   username: 'Lara Croft',
+    //   settings: {
+    //     gender: 'Female',
+    //     age: 29,
+    //   },
+    //   profile: {
+    //     bio: 'Some description description description description description description description',
+    //   },
+    //   img: 'https://cdn.britannica.com/16/254816-050-41C9577A/Google-logo-Googleplex-headquarters-Mountain-View-California.jpg',
+    // });
   };
 
   const Ages = [
@@ -356,17 +368,31 @@ function AddBotPage() {
                   gap: '10px',
                 }}
               >
-                <QuizButton text="Search new" onClick={handleSearch} variant={ButtonType.BLACK}>
+                <QuizButton
+                  text="Search new"
+                  onClick={() => {
+                    handleSearch('decline');
+                  }}
+                  variant={ButtonType.BLACK}
+                >
                   <SearchIcon style={{ marginLeft: '10px' }} />
                 </QuizButton>
-                <QuizButton text="Add this" onClick={handleSearch} variant={ButtonType.APP}>
+                <QuizButton
+                  text="Add this"
+                  onClick={() => {
+                    handleSearch('accept');
+                  }}
+                  variant={ButtonType.APP}
+                >
                   <PersonAddAlt1Icon style={{ marginLeft: '10px' }} />
                 </QuizButton>
               </Box>
             ) : (
               <QuizButton
                 text="Search!"
-                onClick={handleSearch}
+                onClick={() => {
+                  handleSearch('decline');
+                }}
                 variant={isSearchDisabled ? ButtonType.APP_DISABLED : ButtonType.APP}
               ></QuizButton>
             )}

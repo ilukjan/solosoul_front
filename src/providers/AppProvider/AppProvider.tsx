@@ -3,6 +3,7 @@ import {
   AppProviderContextType,
   ConversationsState,
   Message,
+  SearchDataType,
   SocketReceiveMessageType,
   SocketSystemMessageType,
 } from './AppProvider.types';
@@ -37,6 +38,8 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [advertisementVisibility, setAdvertisementVisibility] = useState(false);
   const [tips, setTips] = useState<string[]>([]);
   const [chatPhoto, setChatPhoto] = useState<string | null>(null);
+
+  console.log('userProfile',userProfile);
 
   useEffect(() => {
     setTimeout(() => {
@@ -74,11 +77,11 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const fetchBotToAdd = () => {
+  const fetchBotToAdd = (data:  SearchDataType) => {
     if (userId && userAccessToken) {
       setAddBotLoading(true);
 
-      getBotToAdd(userId || '', userAccessToken || '').then((response) => {
+      getBotToAdd(userId || '', userAccessToken || '', data).then((response) => {
         console.log('getBotToAdd', response);
         setAddBotData(response);
         setAddBotLoading(false);
@@ -89,11 +92,8 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   // GET DATA
   useEffect(() => {
     if (userId && userAccessToken) {
-      // fetchUserConversations();
-
+      fetchUserConversations();
       fetchUserData();
-
-      // fetchBotToAdd();
     }
   }, [userId, userAccessToken]);
 
@@ -166,7 +166,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     })();
   }, [connection]);
 
-  const handleFetchNewBot = (type: 'decline' | 'accept') => {
+  const handleFetchNewBot = (type: 'decline' | 'accept', data: SearchDataType) => {
     switch (type) {
       case 'accept': {
         addConversation(userId || '', userAccessToken || '', addBotData?.id || '').then((response) => {
@@ -176,7 +176,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
         break;
       }
       case 'decline': {
-        fetchBotToAdd();
+        fetchBotToAdd(data);
         break;
       }
     }
@@ -213,7 +213,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const handleUpdateSettings = (search_gender: string, search_age_from: number, search_age_to: number) => {
     if (userAccessToken && userId) {
       updateSettings(userId, userAccessToken, search_gender, search_age_from, search_age_to).then((response) => {
-        fetchBotToAdd();
+        // fetchBotToAdd();
       });
     }
   };

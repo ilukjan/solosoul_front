@@ -29,12 +29,12 @@ function Onboarding() {
     setOnboardingLoading(true);
 
     // REMOVE
-    setUserProfile({account: {
-      gender: gender!,
-      age: Number(age),
-      img: ''
-    }}as any)
-    setSelectedAppView(APP_VIEW.ADD_BOT)
+    // setUserProfile({account: {
+    //   gender: gender!,
+    //   age: Number(age),
+    //   img: ''
+    // }}as any)
+    // setSelectedAppView(APP_VIEW.ADD_BOT)
 
     // REMOVE
 

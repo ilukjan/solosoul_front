@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { APP_API_URL } from './constants';
+import { SearchDataType } from '../providers/AppProvider/AppProvider.types';
 
 export type SignInResponse = {
   user_id: string;
@@ -7,11 +8,10 @@ export type SignInResponse = {
   token_valid_till: string;
 };
 
-export async function signIn({ username, password }: { username: string; password: string }): Promise<SignInResponse> {
+export async function signIn({ userid }: { userid: string }): Promise<SignInResponse> {
   return axios
     .post(APP_API_URL + 'api/user/signin', {
-      username,
-      password,
+      userid,
     })
     .then(function (response) {
       return response.data;
@@ -91,15 +91,31 @@ export type GetBotToAddResponse = {
   messages: [];
 };
 
-export async function getBotToAdd(userId: string, token: string): Promise<GetBotToAddResponse> {
+export async function getBotToAdd(
+  userId: string,
+  token: string,
+  data: SearchDataType
+): Promise<GetBotToAddResponse> {
   return axios
-    .get(APP_API_URL + `api/conversation/pool/${userId}/search`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
+    .post(
+      APP_API_URL + `api/conversation/pool/${userId}/search`,
+      {
+        gender: data.gender,
+        nation: data.nation,
+        // figure: data.figure,
+        age_from: data.age_from,
+        age_to: data.age_to,
+      },
+      {
+        headers: { Authorization: `Bearer ${token}` },
+      }
+    )
+
     .then(function (response) {
       return response.data;
     });
 }
+
 
 export async function addUserAccountInfo(
   userId: string,

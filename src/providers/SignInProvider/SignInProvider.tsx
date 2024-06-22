@@ -17,7 +17,6 @@ export const SignInProvider: FC<{ children: ReactNode }> = ({ children }) => {
     const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
     const access_token = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
     const user_id = window.localStorage.getItem(APP_STORAGE_KEYS.USER_ID);
-
     if (access_token && token_expired_date && new Date(token_expired_date) > new Date()) {
       setUserAccessToken(access_token);
       setUserId(user_id);
@@ -28,15 +27,15 @@ export const SignInProvider: FC<{ children: ReactNode }> = ({ children }) => {
 
       getCurrentBrowserFingerPrint().then((fingerprint) => {
         console.log('handleSignIn(', fingerprint);
-        handleSignIn(fingerprint, 'password');
+        handleSignIn(fingerprint);
       });
     }
   }, []);
 
-  const handleSignIn = (username: string, password: string) => {
+  const handleSignIn = (userid: string) => {
     setSignInLoading(false);
 
-    signIn({ username, password })
+    signIn({ userid })
       .then((response) => {
         console.log('signIn resp', response);
         setUserAccessToken(response.access_token);

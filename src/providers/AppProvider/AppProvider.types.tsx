@@ -18,7 +18,7 @@ export type AppProviderContextType = {
   setAdvertisementVisibility: (s: boolean) => void;
   isAddBotLoading: boolean;
   setAddBotLoading: (s: boolean) => void;
-  handleFetchNewBot: (s: 'decline' | 'accept') => void;
+  handleFetchNewBot: (s: 'decline' | 'accept', data: SearchDataType) => void;
   addBotData: GetBotToAddResponse | null;
   fetchUserData: () => void;
   handleUpdateSettings: (search_gender: string, search_age_from: number, search_age_to: number) => void;
@@ -55,4 +55,11 @@ export type SocketSystemMessageType = {
   MessageType: number;
   Timestamp: string;
   Message: string;
+};
+export type SearchDataType = {
+  gender: string;
+  nation: string;
+  figure: string;
+  age_from: number;
+  age_to: number;
 };

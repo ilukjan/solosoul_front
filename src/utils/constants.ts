@@ -17,7 +17,7 @@ export const APP_VIEW = {
 
 
 export enum Gender {
-  MALE = 'MALE',
-  FEMALE = 'FEMALE',
-  NON_BINARY = 'NON_BINARY',
+  MALE = 'Male',
+  FEMALE = 'Female',
+  NON_BINARY = 'Non_binary',
 }
