@@ -4,7 +4,7 @@ import SignIn from './SignIn';
 import { AppProvider } from './providers/AppProvider';
 import PublicRoute from './components/routes/PublicRoute';
 import PrivateRoute from './components/routes/PrivateRoute';
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { createHashRouter, RouterProvider } from 'react-router-dom';
 import ProvideRoute from './components/routes/ProvideRoute';
 import Main from './components/Main/Main';
 import { TelegramProvider } from './providers/TelegramProvider/TelegramProvider';
@@ -15,7 +15,7 @@ export enum AppRoutes {
   SIGN_IN = '/solosoul_front/sign-in',
   MAIN = '/solosoul_front/main',
 }
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: AppRoutes.HOME,
     element: <ProvideRoute />,
@@ -43,7 +43,7 @@ function App() {
           fontSize: '6px',
         }}
       >
-        0.0.2
+        0.0.3
       </Box>
       <TelegramProvider>
         <AppProvider>
