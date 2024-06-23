@@ -10,11 +10,17 @@ export type SignInResponse = {
   token_valid_till: string;
 };
 
-export async function signIn({ username, password }: { username: string; password: string }): Promise<SignInResponse> {
+export async function signIn({
+  username,
+}: // password
+{
+  username: string;
+  // password: string
+}): Promise<SignInResponse> {
   return axios
     .post(process.env.REACT_APP_API_URL + 'api/user/signin', {
       username,
-      password,
+      // password,
     })
     .then(function (response) {
       return response.data;

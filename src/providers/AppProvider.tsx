@@ -55,21 +55,21 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }, 100);
   }, []);
 
-  useEffect(() => {
-    const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
-    const access_token = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
-    const user_id = window.localStorage.getItem(APP_STORAGE_KEYS.USER_ID);
+  // useEffect(() => {
+  //   const token_expired_date = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
+  //   const access_token = window.localStorage.getItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
+  //   const user_id = window.localStorage.getItem(APP_STORAGE_KEYS.USER_ID);
 
-    if (token_expired_date) {
-      if (new Date(token_expired_date) > new Date()) {
-        setUserAccessToken(access_token);
-        setUserId(user_id);
-      } else {
-        window.localStorage.removeItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
-        window.localStorage.removeItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
-      }
-    }
-  }, []);
+  //   if (token_expired_date) {
+  //     if (new Date(token_expired_date) > new Date()) {
+  //       setUserAccessToken(access_token);
+  //       setUserId(user_id);
+  //     } else {
+  //       window.localStorage.removeItem(APP_STORAGE_KEYS.ACCESS_TOKEN);
+  //       window.localStorage.removeItem(APP_STORAGE_KEYS.ACCESS_TOKEN_VALID_TILL);
+  //     }
+  //   }
+  // }, []);
 
   const fetchUserConversations = () => {
     if (userId && userAccessToken) {
@@ -124,13 +124,16 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   useEffect(() => {
     if (telegramUser) {
       console.log('AUTO LOGIN');
-      handleSignIn('mikle', 'secret');
+      handleSignIn(telegramUser.first_name);
     }
   }, [telegramUser]);
 
-  const handleSignIn = (username: string, password: string) => {
+  const handleSignIn = (username: string, password?: string) => {
     setSignInLoading(true);
-    signIn({ username, password })
+    signIn({
+      username,
+      //, password
+    })
       .then((response) => {
         setUserAccessToken(response.access_token);
         setUserId(response.user_id);
@@ -167,6 +170,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
       if (connection) {
         try {
           await connection.start();
+          console.log(1111, 'START');
 
           connection.on('ReceiveMessage', (ReceiveMessageResponse) => {
             const answerMessage: SocketReceiveMessageType = JSON.parse(ReceiveMessageResponse);
