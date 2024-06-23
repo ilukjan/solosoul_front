@@ -44,6 +44,7 @@ export type AppProviderContextType = {
   handleAddFile: (s: string) => void;
   messagesLimit: number;
   setMessagesLimit: (v: number) => void;
+  handlePurchase: () => void;
 };
 
 export type Message = {

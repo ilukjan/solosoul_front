@@ -9,6 +9,7 @@ import ProvideRoute from './components/routes/ProvideRoute';
 import Main from './components/Main/Main';
 import { TelegramProvider } from './providers/TelegramProvider/TelegramProvider';
 import { Box } from '@mui/material';
+import { THEME, TonConnectUIProvider } from '@tonconnect/ui-react';
 
 export enum AppRoutes {
   HOME = '*',
@@ -43,13 +44,21 @@ function App() {
           fontSize: '6px',
         }}
       >
-        0.0.3
+        0.0.4
       </Box>
-      <TelegramProvider>
-        <AppProvider>
-          <RouterProvider router={router} />
-        </AppProvider>
-      </TelegramProvider>
+      <TonConnectUIProvider
+        uiPreferences={{ theme: THEME.DARK }}
+        manifestUrl={`https://ilukjan.github.io/solosoul_front/tonconnect-manifest.json`}
+        actionsConfiguration={{
+          twaReturnUrl: 'https://t.me/TheSoloSoulBot/SoloSoul' as `${string}://${string}`,
+        }}
+      >
+        <TelegramProvider>
+          <AppProvider>
+            <RouterProvider router={router} />
+          </AppProvider>
+        </TelegramProvider>
+      </TonConnectUIProvider>
     </>
   );
 }

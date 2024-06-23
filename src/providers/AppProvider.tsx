@@ -1,4 +1,4 @@
-import { ReactNode, createContext, FC, useState, useEffect } from 'react';
+import { ReactNode, createContext, FC, useState, useEffect, useCallback } from 'react';
 import {
   AppProviderContextType,
   ConversationsState,
@@ -24,6 +24,13 @@ import { APP_STORAGE_KEYS } from '../services/constants';
 import { APP_VIEW } from '../utils/constants';
 import { getMessagesFromLocalStorage, saveMessageToLocalStorage } from '../utils/localStorage';
 import { useTelegram } from './TelegramProvider/TelegramProvider';
+import {
+  useTonConnectModal,
+  ConnectedWallet,
+  SendTransactionRequest,
+  useTonAddress,
+  useTonConnectUI,
+} from '@tonconnect/ui-react';
 
 export const AppContext = createContext<AppProviderContextType | null>(null);
 
@@ -46,6 +53,10 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [chatPhoto, setChatPhoto] = useState<string | null>(null);
   const [messagesLimit, setMessagesLimit] = useState(0);
   const { user: telegramUser } = useTelegram();
+  const userFriendlyAddress = useTonAddress();
+  const { open } = useTonConnectModal();
+  const [tonConnectUI] = useTonConnectUI();
+
   useEffect(() => {
     setTimeout(() => {
       setTips((prev) => [
@@ -329,6 +340,33 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     });
   };
 
+  const handlePurchase = useCallback(async () => {
+    if (userFriendlyAddress !== '') {
+      const transaction: SendTransactionRequest = {
+        validUntil: Math.floor(Date.now() / 1000) + 360,
+        messages: [
+          {
+            address: 'UQATTFgrygPAdSwoSJquE2P0U1Ubj9cp_KMRIbNDWbl_xdTs',
+            amount: '50000000',
+            // payload: body.toBoc().toString('base64'),
+          },
+        ],
+      };
+      console.log('transaction', transaction);
+      try {
+        const trxResult = await tonConnectUI.sendTransaction(transaction);
+        console.log('trxResult', trxResult);
+        return true;
+      } catch (error: any) {
+        const errorMessage = 'message' in error ? error.message : JSON.stringify(error);
+        console.error(' sendTransaction error', errorMessage);
+        return false;
+      }
+    } else {
+      open();
+    }
+  }, [userFriendlyAddress]);
+
   const value: AppProviderContextType = {
     isUserAuthorized: userAccessToken !== null,
     handleSignIn,
@@ -361,6 +399,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     handleAddFile,
     messagesLimit,
     setMessagesLimit,
+    handlePurchase,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };

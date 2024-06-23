@@ -77,7 +77,7 @@ const MessagesProgress = ({ progress }: { progress: number | undefined }) => {
 };
 
 function Settings() {
-  const { setSelectedAppView, userProfile, fetchUserData, handleUpdateSettings, messagesLimit } = useAppState();
+  const { setSelectedAppView, userProfile, fetchUserData, handleUpdateSettings, messagesLimit, handlePurchase } = useAppState();
   const { user } = useTelegram();
   const [searchFor, setSearchFor] = useState(userProfile?.search_settings.search_gender);
   const [nationality, setNationality] = useState(userProfile?.search_settings.nationality);
@@ -292,9 +292,7 @@ function Settings() {
                 }}
               >
                 <Button
-                  onClick={() => {
-                    // purchase()
-                  }}
+                  onClick={handlePurchase}
                   variant="contained"
                   sx={{
                     color: 'white',
@@ -401,9 +399,7 @@ function Settings() {
                 }}
               >
                 <Button
-                  onClick={() => {
-                    // purchase()
-                  }}
+                  onClick={handlePurchase}
                   variant="contained"
                   sx={{
                     color: 'white',
