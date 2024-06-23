@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Box, Button, Dialog, Drawer, LinearProgress, Typography } from '@mui/material';
+import { Box, Button, Drawer, LinearProgress, Typography } from '@mui/material';
 import ArrowBack from '../../../../assets/svg/arrow_back.svg';
 import tg_premium from '../../../../assets/images/tg_premium.webp';
 
@@ -10,8 +10,10 @@ import ReadSvg from '../../../../assets/svg/readed_gray.svg';
 import SendRoundedIcon from '@mui/icons-material/SendRounded';
 import AttachIcon from '../../../../assets/svg/attack_icon.svg';
 import { linearProgressClasses } from '@mui/material/LinearProgress';
+import { useTelegram } from '../../../../providers/TelegramProvider/TelegramProvider';
+import { MAX_MESSAGES_LIMIT } from '../../../../providers/AppProvider';
 
-export const MessagesProgress = ({ progress }: { progress: number | undefined }) => {
+export const MessagesProgress = ({ messagesLimit }: { messagesLimit: number }) => {
   return (
     <Box
       sx={{
@@ -36,7 +38,7 @@ export const MessagesProgress = ({ progress }: { progress: number | undefined })
           },
         }}
         variant="determinate"
-        value={Number(progress) * 10}
+        value={(messagesLimit / MAX_MESSAGES_LIMIT) * 100}
       />
       <Typography
         sx={{
@@ -46,7 +48,7 @@ export const MessagesProgress = ({ progress }: { progress: number | undefined })
           position: 'absolute',
         }}
       >
-        Messages limit {progress}/10
+        Messages limit {messagesLimit}/{MAX_MESSAGES_LIMIT}
       </Typography>
     </Box>
   );
@@ -66,11 +68,21 @@ function Chat() {
     messagesLimit,
     setMessagesLimit,
   } = useAppState();
+  const { webApp } = useTelegram();
   const [isLimitOpen, setLimitOpen] = useState(false);
+
+  useEffect(() => {
+    if (webApp) {
+      webApp.onEvent('viewportChanged', () => {
+        console.log('changed', webApp.viewportHeight);
+        window.scrollTo(0,0)
+      });
+    }
+  }, [webApp]);
 
   const handleSendMessageClick = useCallback(() => {
     if (message !== '') {
-      if (messagesLimit >= 10) {
+      if (messagesLimit >= MAX_MESSAGES_LIMIT) {
         setLimitOpen(true);
       } else {
         setMessagesLimit(messagesLimit + 1);
@@ -224,7 +236,7 @@ function Chat() {
                 ></Box>
               </Box>
             </Box>
-            <MessagesProgress progress={messagesLimit} />
+            <MessagesProgress messagesLimit={messagesLimit} />
           </Box>
           <Box
             id="messages_container"

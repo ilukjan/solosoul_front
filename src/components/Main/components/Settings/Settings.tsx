@@ -10,6 +10,7 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import tg_premium from '../../../../assets/images/tg_premium.webp';
 import { useTelegram } from '../../../../providers/TelegramProvider/TelegramProvider';
+import { MAX_MESSAGES_LIMIT } from '../../../../providers/AppProvider';
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -56,7 +57,7 @@ const CustomProgress = ({
   );
 };
 
-const MessagesProgress = ({ progress }: { progress: number | undefined }) => {
+const MessagesProgress = ({ messagesLimit }: { messagesLimit: number }) => {
   return (
     <LinearProgress
       sx={{
@@ -71,13 +72,14 @@ const MessagesProgress = ({ progress }: { progress: number | undefined }) => {
         },
       }}
       variant="determinate"
-      value={Number(progress) * 10}
+      value={(messagesLimit / MAX_MESSAGES_LIMIT) * 100}
     />
   );
 };
 
 function Settings() {
-  const { setSelectedAppView, userProfile, fetchUserData, handleUpdateSettings, messagesLimit, handlePurchase } = useAppState();
+  const { setSelectedAppView, userProfile, fetchUserData, handleUpdateSettings, messagesLimit, handlePurchase } =
+    useAppState();
   const { user } = useTelegram();
   const [searchFor, setSearchFor] = useState(userProfile?.search_settings.search_gender);
   const [nationality, setNationality] = useState(userProfile?.search_settings.nationality);
@@ -284,8 +286,10 @@ function Settings() {
                 },
               }}
             >
-              <Typography className="title">Messages limit {messagesLimit}/10</Typography>
-              <MessagesProgress progress={messagesLimit} />
+              <Typography className="title">
+                Messages limit {messagesLimit}/{MAX_MESSAGES_LIMIT}
+              </Typography>
+              <MessagesProgress messagesLimit={messagesLimit} />
               <Box
                 sx={{
                   padding: '10px',

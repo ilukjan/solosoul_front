@@ -24,14 +24,9 @@ import { APP_STORAGE_KEYS } from '../services/constants';
 import { APP_VIEW } from '../utils/constants';
 import { getMessagesFromLocalStorage, saveMessageToLocalStorage } from '../utils/localStorage';
 import { useTelegram } from './TelegramProvider/TelegramProvider';
-import {
-  useTonConnectModal,
-  ConnectedWallet,
-  SendTransactionRequest,
-  useTonAddress,
-  useTonConnectUI,
-} from '@tonconnect/ui-react';
+import { useTonConnectModal, SendTransactionRequest, useTonAddress, useTonConnectUI } from '@tonconnect/ui-react';
 
+export const MAX_MESSAGES_LIMIT = 5;
 export const AppContext = createContext<AppProviderContextType | null>(null);
 
 export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
