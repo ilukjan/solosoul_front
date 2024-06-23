@@ -1,13 +1,14 @@
 {
   "files": {
     "main.css": "/solosoul_front/static/css/main.476833ae.css",
-    "main.js": "/solosoul_front/static/js/main.c8352391.js",
+    "main.js": "/solosoul_front/static/js/main.5b5ec33a.js",
     "static/media/SFUIDisplay-Semibold.ttf": "/solosoul_front/static/media/SFUIDisplay-Semibold.cb4925c92f2e65033ecd.ttf",
     "static/media/SFUIDisplay-Bold.ttf": "/solosoul_front/static/media/SFUIDisplay-Bold.1cd932c78a782a2a36b3.ttf",
     "static/media/SFUIDisplay-Medium.ttf": "/solosoul_front/static/media/SFUIDisplay-Medium.a49cbc2c4a4f1f9f24ed.ttf",
     "static/media/sign_in_bg.webp": "/solosoul_front/static/media/sign_in_bg.829fdadfc3432511e174.webp",
     "static/media/SFUIDisplay-Regular.ttf": "/solosoul_front/static/media/SFUIDisplay-Regular.fb1826d2ed3f20c58a51.ttf",
     "static/media/chat_bg.webp": "/solosoul_front/static/media/chat_bg.2311b5c00b6cf1bbcb0f.webp",
+    "static/media/tg_premium.webp": "/solosoul_front/static/media/tg_premium.9b48913357ea32c8ec6c.webp",
     "static/media/attack_icon.svg": "/solosoul_front/static/media/attack_icon.13277e45c8713ea52b51cd0f7b22fd67.svg",
     "static/media/chats_icon.svg": "/solosoul_front/static/media/chats_icon.8eaba694b66b702d66c0e1eeeee9d90c.svg",
     "static/media/readed_gray.svg": "/solosoul_front/static/media/readed_gray.e335844592ec8331fc5041b842a6dfaa.svg",
@@ -15,10 +16,10 @@
     "index.html": "/solosoul_front/index.html",
     "static/media/arrow_back.svg": "/solosoul_front/static/media/arrow_back.8028b9c777295a1bef6e31464b2cd6f6.svg",
     "main.476833ae.css.map": "/solosoul_front/static/css/main.476833ae.css.map",
-    "main.c8352391.js.map": "/solosoul_front/static/js/main.c8352391.js.map"
+    "main.5b5ec33a.js.map": "/solosoul_front/static/js/main.5b5ec33a.js.map"
   },
   "entrypoints": [
     "static/css/main.476833ae.css",
-    "static/js/main.c8352391.js"
+    "static/js/main.5b5ec33a.js"
   ]
 }
