@@ -33,9 +33,17 @@ export type AppProviderContextType = {
   handleFetchNewBot: (s: 'decline' | 'accept') => void;
   addBotData: GetBotToAddResponse | null;
   fetchUserData: () => void;
-  handleUpdateSettings: (search_gender: string, search_age_from: number, search_age_to: number) => void;
+  handleUpdateSettings: (
+    search_gender: string,
+    search_age_from: number,
+    search_age_to: number,
+    nationality: string,
+    figure: string
+  ) => void;
   chatPhoto: string | null;
   handleAddFile: (s: string) => void;
+  messagesLimit: number;
+  setMessagesLimit: (v: number) => void;
 };
 
 export type Message = {

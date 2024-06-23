@@ -103,6 +103,8 @@ export type UserProfileResponse = {
     search_gender: string;
     search_age_from: number;
     search_age_to: number;
+    nationality: string;
+    figure: string;
     topics: [
       {
         topic_id: string;
@@ -168,7 +170,9 @@ export async function updateSettings(
   token: string,
   search_gender: string,
   search_age_from: number,
-  search_age_to: number
+  search_age_to: number,
+  nationality: string,
+  figure: string
 ): Promise<GetBotToAddResponse> {
   return axios
     .post(
@@ -177,6 +181,8 @@ export async function updateSettings(
         search_gender,
         search_age_from,
         search_age_to,
+        nationality,
+        figure,
       },
       {
         headers: { Authorization: `Bearer ${token}` },
@@ -186,8 +192,6 @@ export async function updateSettings(
       return response.data;
     });
 }
-
-
 
 export async function sendMediaMessage(id: string, token: string): Promise<any> {
   return axios

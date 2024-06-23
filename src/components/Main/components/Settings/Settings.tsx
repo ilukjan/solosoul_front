@@ -8,6 +8,7 @@ import { useAppState } from '../../../../providers/AppProvider.hooks';
 import { linearProgressClasses } from '@mui/material/LinearProgress';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
+import tg_premium from '../../../../assets/images/tg_premium.webp';
 import { useTelegram } from '../../../../providers/TelegramProvider/TelegramProvider';
 
 interface TabPanelProps {
@@ -55,18 +56,37 @@ const CustomProgress = ({
   );
 };
 
+const MessagesProgress = ({ progress }: { progress: number | undefined }) => {
+  return (
+    <LinearProgress
+      sx={{
+        height: 10,
+        borderRadius: 5,
+        [`&.${linearProgressClasses.colorPrimary}`]: {
+          backgroundColor: '#1C1C1D',
+        },
+        [`& .${linearProgressClasses.bar}`]: {
+          background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
+          borderRadius: 10,
+        },
+      }}
+      variant="determinate"
+      value={Number(progress) * 10}
+    />
+  );
+};
+
 function Settings() {
-  const { setSelectedAppView, userProfile, fetchUserData, handleUpdateSettings } = useAppState();
+  const { setSelectedAppView, userProfile, fetchUserData, handleUpdateSettings, messagesLimit } = useAppState();
   const { user } = useTelegram();
   const [searchFor, setSearchFor] = useState(userProfile?.search_settings.search_gender);
+  const [nationality, setNationality] = useState(userProfile?.search_settings.nationality);
+  const [figure, setFigure] = useState(userProfile?.search_settings.figure);
+
   const [searchAgeFrom, setSearchAgeFrom] = useState(String(userProfile?.search_settings.search_age_from));
   const [searchAgeTo, setSearchAgeTo] = useState(String(userProfile?.search_settings.search_age_to));
   const handleClickBack = () => {
     setSelectedAppView(APP_VIEW.MAIN);
-  };
-
-  const handleChangeSearchFor = (event: SelectChangeEvent) => {
-    setSearchFor(event.target.value);
   };
 
   useEffect(() => {
@@ -264,6 +284,29 @@ function Settings() {
                 },
               }}
             >
+              <Typography className="title">Messages limit {messagesLimit}/10</Typography>
+              <MessagesProgress progress={messagesLimit} />
+              <Box
+                sx={{
+                  padding: '10px',
+                }}
+              >
+                <Button
+                  onClick={() => {
+                    // purchase()
+                  }}
+                  variant="contained"
+                  sx={{
+                    color: 'white',
+                    borderRadius: '10px',
+                    width: '100%',
+                    background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
+                  }}
+                >
+                  <img style={{ marginRight: '5px' }} width={20} height={20} src={tg_premium} alt="tg_premium"></img>
+                  Increase my limits
+                </Button>
+              </Box>
               <Box
                 sx={{
                   background: APP_COLORS.black,
@@ -278,6 +321,7 @@ function Settings() {
                 <Typography className="title">Age</Typography>
                 <Typography className="subTitle">{userProfile?.age}</Typography>
               </Box>
+
               <Box
                 sx={{
                   background: APP_COLORS.black,
@@ -353,6 +397,27 @@ function Settings() {
             >
               <Box
                 sx={{
+                  padding: '10px',
+                }}
+              >
+                <Button
+                  onClick={() => {
+                    // purchase()
+                  }}
+                  variant="contained"
+                  sx={{
+                    color: 'white',
+                    borderRadius: '10px',
+                    width: '100%',
+                    background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
+                  }}
+                >
+                  <img style={{ marginRight: '5px' }} width={20} height={20} src={tg_premium} alt="tg_premium"></img>
+                  Unlock all topics
+                </Button>
+              </Box>
+              <Box
+                sx={{
                   padding: '10px 10px 20px',
                 }}
               >
@@ -395,17 +460,22 @@ function Settings() {
                   color: APP_COLORS.textMain,
                   marginLeft: '10px',
                 },
+                '& .selectTitle': {
+                  fontFamily: 'sfpro400',
+                  fontSize: '16px',
+                  color: APP_COLORS.textMain,
+                },
                 '& .subTitle': {
                   fontFamily: 'sfpro400',
                   fontSize: '16px',
                   marginLeft: '10px',
-                  color: APP_COLORS.blue,
+                  color: APP_COLORS.textMain,
                 },
                 '& .divider': {
                   height: '1px',
                   width: '100%',
                   background: APP_COLORS.border,
-                  margin: '20px 0',
+                  margin: '15px 0',
                   opacity: 0.5,
                 },
               }}
@@ -418,70 +488,164 @@ function Settings() {
                   margin: '10px',
                 }}
               >
-                <Typography className="title">Search for</Typography>
                 <Box
                   sx={{
-                    margin: '10px',
+                    display: 'flex',
                   }}
                 >
-                  <Select
-                    sx={{
-                      width: '100%',
-                    }}
-                    variant="standard"
-                    value={searchFor}
-                    onChange={handleChangeSearchFor}
-                  >
-                    <MenuItem value={'Male'}>
-                      <Typography className="subTitle">Male</Typography>
-                    </MenuItem>
-                    <MenuItem value={'Female'}>
-                      <Typography className="subTitle">Female</Typography>
-                    </MenuItem>
-                  </Select>
+                  <Box width="100%">
+                    <Typography className="title">Search for</Typography>
+                    <Box
+                      sx={{
+                        margin: '10px',
+                      }}
+                    >
+                      <Select
+                        sx={{
+                          borderRadius: '10px',
+                          width: '100%',
+                          height: '33px',
+                          background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
+                        }}
+                        variant="outlined"
+                        value={searchFor}
+                        onChange={(event: SelectChangeEvent) => {
+                          setSearchFor(event.target.value);
+                        }}
+                      >
+                        <MenuItem value={'Male'}>
+                          <Typography className="selectTitle">Male</Typography>
+                        </MenuItem>
+                        <MenuItem value={'Female'}>
+                          <Typography className="selectTitle">Female</Typography>
+                        </MenuItem>
+                      </Select>
+                    </Box>
+                  </Box>
+                  <Box width="100%">
+                    <Typography className="title">Nationality</Typography>
+                    <Box
+                      sx={{
+                        margin: '10px',
+                      }}
+                    >
+                      <Select
+                        sx={{
+                          borderRadius: '10px',
+                          width: '100%',
+                          height: '33px',
+                          background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
+                        }}
+                        variant="outlined"
+                        value={nationality}
+                        onChange={(event: SelectChangeEvent) => {
+                          setNationality(event.target.value);
+                        }}
+                      >
+                        <MenuItem value={'Asian'}>
+                          <Typography className="selectTitle">Asian</Typography>
+                        </MenuItem>
+                        <MenuItem value={'European'}>
+                          <Typography className="selectTitle">European</Typography>
+                        </MenuItem>
+                        <MenuItem value={'Latina'}>
+                          <Typography className="selectTitle">Latina</Typography>
+                        </MenuItem>
+                        <MenuItem value={'African'}>
+                          <Typography className="selectTitle">African</Typography>
+                        </MenuItem>
+                      </Select>
+                    </Box>
+                  </Box>
                 </Box>
+
                 <Box className="divider"></Box>
-                <Typography className="title">Search age</Typography>
 
                 <Box
                   sx={{
                     display: 'flex',
-                    alignItems: 'center',
-                    margin: '10px',
                   }}
                 >
-                  <Select
-                    sx={{
-                      minWidth: '55px',
-                    }}
-                    variant="standard"
-                    value={searchAgeFrom}
-                    onChange={(event: SelectChangeEvent) => {
-                      setSearchAgeFrom(event.target.value);
-                    }}
-                  >
-                    {ageValues()}
-                  </Select>
-                  <Typography
-                    sx={{
-                      marginLeft: '0px!important',
-                    }}
-                    className="subTitle"
-                  >
-                    -
-                  </Typography>
-                  <Select
-                    sx={{
-                      minWidth: '55px',
-                    }}
-                    variant="standard"
-                    value={searchAgeTo}
-                    onChange={(event: SelectChangeEvent) => {
-                      setSearchAgeTo(event.target.value);
-                    }}
-                  >
-                    {ageValues(searchAgeFrom)}
-                  </Select>
+                  <Box width="100%">
+                    <Typography className="title">Search age</Typography>
+                    <Box
+                      sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        margin: '10px',
+                      }}
+                    >
+                      <Select
+                        sx={{
+                          minWidth: '55px',
+                          borderRadius: '10px',
+                          background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
+                        }}
+                        variant="standard"
+                        value={searchAgeFrom}
+                        onChange={(event: SelectChangeEvent) => {
+                          setSearchAgeFrom(event.target.value);
+                        }}
+                      >
+                        {ageValues()}
+                      </Select>
+                      <Typography
+                        sx={{
+                          margin: '0px 10px!important',
+                        }}
+                        className="subTitle"
+                      >
+                        -
+                      </Typography>
+                      <Select
+                        sx={{
+                          minWidth: '55px',
+                          borderRadius: '10px',
+                          background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
+                        }}
+                        variant="standard"
+                        value={searchAgeTo}
+                        onChange={(event: SelectChangeEvent) => {
+                          setSearchAgeTo(event.target.value);
+                        }}
+                      >
+                        {ageValues(searchAgeFrom)}
+                      </Select>
+                    </Box>
+                  </Box>
+
+                  <Box width="100%">
+                    <Typography className="title">Figure</Typography>
+                    <Box
+                      sx={{
+                        margin: '10px',
+                      }}
+                    >
+                      <Select
+                        sx={{
+                          borderRadius: '10px',
+                          width: '100%',
+                          height: '33px',
+                          background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
+                        }}
+                        variant="outlined"
+                        value={figure}
+                        onChange={(event: SelectChangeEvent) => {
+                          setFigure(event.target.value);
+                        }}
+                      >
+                        <MenuItem value={'Slim'}>
+                          <Typography className="selectTitle">Slim</Typography>
+                        </MenuItem>
+                        <MenuItem value={'Regular'}>
+                          <Typography className="selectTitle">Regular</Typography>
+                        </MenuItem>
+                        <MenuItem value={'PlusSize'}>
+                          <Typography className="selectTitle">PlusSize</Typography>
+                        </MenuItem>
+                      </Select>
+                    </Box>
+                  </Box>
                 </Box>
               </Box>
               <Box
@@ -491,7 +655,13 @@ function Settings() {
               >
                 <Button
                   onClick={() => {
-                    handleUpdateSettings(searchFor || '', Number(searchAgeFrom), Number(searchAgeTo));
+                    handleUpdateSettings(
+                      searchFor || '',
+                      Number(searchAgeFrom),
+                      Number(searchAgeTo),
+                      nationality || '',
+                      figure || ''
+                    );
                   }}
                   variant="contained"
                   sx={{
@@ -501,7 +671,7 @@ function Settings() {
                     background: 'linear-gradient(180deg, #6558FD 0%, #7951CE 100%)',
                   }}
                 >
-                  Update settings
+                  Save search settings
                 </Button>
               </Box>
             </Box>

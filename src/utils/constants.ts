@@ -5,7 +5,7 @@ export const APP_COLORS = {
   textMain: "#FFFFFF",
   textSecondary: "#8E8E93",
   blue: '#3B83F6',
-  botMessage: '#343437'
+  botMessage: '#343437',
 }
 
 export const APP_VIEW = {

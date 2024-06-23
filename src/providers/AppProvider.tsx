@@ -44,6 +44,7 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
   const [advertisementVisibility, setAdvertisementVisibility] = useState(false);
   const [tips, setTips] = useState<string[]>([]);
   const [chatPhoto, setChatPhoto] = useState<string | null>(null);
+  const [messagesLimit, setMessagesLimit] = useState(0);
   const { user: telegramUser } = useTelegram();
   useEffect(() => {
     setTimeout(() => {
@@ -170,8 +171,6 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
       if (connection) {
         try {
           await connection.start();
-          console.log(1111, 'START');
-
           connection.on('ReceiveMessage', (ReceiveMessageResponse) => {
             const answerMessage: SocketReceiveMessageType = JSON.parse(ReceiveMessageResponse);
             console.log('ReceiveMessageResponse', answerMessage);
@@ -289,11 +288,19 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     }
   };
 
-  const handleUpdateSettings = (search_gender: string, search_age_from: number, search_age_to: number) => {
+  const handleUpdateSettings = (
+    search_gender: string,
+    search_age_from: number,
+    search_age_to: number,
+    nationality: string,
+    figure: string
+  ) => {
     if (userAccessToken && userId) {
-      updateSettings(userId, userAccessToken, search_gender, search_age_from, search_age_to).then((response) => {
-        fetchBotToAdd();
-      });
+      updateSettings(userId, userAccessToken, search_gender, search_age_from, search_age_to, nationality, figure).then(
+        (response) => {
+          fetchBotToAdd();
+        }
+      );
     }
   };
 
@@ -352,6 +359,8 @@ export const AppProvider: FC<{ children: ReactNode }> = ({ children }) => {
     handleUpdateSettings,
     chatPhoto,
     handleAddFile,
+    messagesLimit,
+    setMessagesLimit,
   };
   return <AppContext.Provider value={value}>{children}</AppContext.Provider>;
 };
