@@ -8,6 +8,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import ProvideRoute from './components/routes/ProvideRoute';
 import Main from './components/Main/Main';
 import { TelegramProvider } from './providers/TelegramProvider/TelegramProvider';
+import { Box } from '@mui/material';
 
 export enum AppRoutes {
   HOME = '*',
@@ -31,11 +32,25 @@ const router = createBrowserRouter([
 
 function App() {
   return (
-    <TelegramProvider>
-      <AppProvider>
-        <RouterProvider router={router} />
-      </AppProvider>
-    </TelegramProvider>
+    <>
+      <Box
+        sx={{
+          position: 'fixed',
+          bottom: 2,
+          left: 2,
+          color: 'gray',
+          zIndex: 9999,
+          fontSize: '6px',
+        }}
+      >
+        0.0.2
+      </Box>
+      <TelegramProvider>
+        <AppProvider>
+          <RouterProvider router={router} />
+        </AppProvider>
+      </TelegramProvider>
+    </>
   );
 }
 

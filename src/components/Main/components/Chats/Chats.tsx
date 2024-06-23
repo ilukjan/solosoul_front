@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Box, Button, Modal, Typography } from '@mui/material';
+import React from 'react';
+import { Box, Typography } from '@mui/material';
 
 import { useAppState } from '../../../../providers/AppProvider.hooks';
 import Footer from '../../../common/Footer/Footer';
@@ -20,18 +20,6 @@ function Chats() {
 
   return (
     <>
-      <Box
-        sx={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          color: 'gray',
-          zIndex: 9999,
-          fontSize: '8px',
-        }}
-      >
-        0.1
-      </Box>
       <Box
         sx={{
           position: 'absolute',
