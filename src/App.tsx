@@ -11,8 +11,8 @@ import { TelegramProvider } from './providers/TelegramProvider/TelegramProvider'
 
 export enum AppRoutes {
   HOME = '*',
-  SIGN_IN = '/sign-in',
-  MAIN = '/main',
+  SIGN_IN = '/solosoul_front/sign-in',
+  MAIN = '/solosoul_front/main',
 }
 const router = createBrowserRouter([
   {
