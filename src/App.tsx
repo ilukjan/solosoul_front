@@ -44,7 +44,7 @@ function App() {
           fontSize: '6px',
         }}
       >
-        0.0.4
+        0.0.5
       </Box>
       <TonConnectUIProvider
         uiPreferences={{ theme: THEME.DARK }}
